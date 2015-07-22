@@ -1,0 +1,240 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>com.github.spartatech</groupId>
+	<artifactId>spring-web-utils</artifactId>
+	<version>1.2</version>
+	<packaging>jar</packaging>
+	
+	<name>Sparta Spring Web Utils</name>
+	<description>Spring Web helper library</description>
+	<url>https://github.com/SpartaTech/sparta-spring-web-utils</url>
+			
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	
+	<developers>
+		<developer>
+			<name>Carlos Eduardo Endler Genz</name>
+			<email>kadugenz@gmail.com</email>
+			<organizationUrl>https://github.com/SpartaTech</organizationUrl>
+			<roles>
+				<role>Owner</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Daniel Conde Diehl</name>
+			<email>daniel.diehl@gmail.com</email>
+			<organizationUrl>https://github.com/SpartaTech</organizationUrl>
+			<roles>
+				<role>Owner</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+	
+	<scm>
+		<connection>scm:git:git@github.com:SpartaTech/sparta-spring-web-utils.git</connection>
+		<developerConnection>scm:git:git@github.com:SpartaTech/sparta-spring-web-utils.git</developerConnection>
+		<url>git@github.com:SpartaTech/sparta-spring-web-utils.git</url>
+  	</scm>
+	
+	
+	<properties>
+		<java.version>1.7</java.version>
+		<spring.version>[3.0.5.RELEASE,)</spring.version>
+		<slf4j.version>[1.6.1,)</slf4j.version>
+		<commons-lang.version>[3.2.1,)</commons-lang.version>
+		<commons-io.version>[2.4,)</commons-io.version>
+		<junit.version>[4.11,)</junit.version>
+		<jmockit.version>[1.15,)</jmockit.version>
+		<guava.version>18.0</guava.version>
+		<geronimo.servlet.version>1.0</geronimo.servlet.version>
+	</properties>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.12.2</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>add-resource</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>add-test-resource</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<resource>
+									<directory>${basedir}/src/main/webapp</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+	
+	<dependencies>
+		<!-- BEGIN - Tests Dependencies -->
+		<dependency>
+			<groupId>org.jmockit</groupId>
+			<artifactId>jmockit</artifactId>
+			<version>${jmockit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jmockit</groupId>
+			<artifactId>jmockit-coverage</artifactId>
+			<version>${jmockit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>	
+			<version>${spring.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
+		</dependency>
+		<!-- END - Tests Dependencies -->
+
+		<!-- BEGIN - Logging Dependencies -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- END - Logging Dependencies -->
+
+		<!-- BEGIN - Spring Dependencies -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- END - Spring Dependencies -->
+		
+		<!-- BEGIN - Servlet Dependencies -->
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-servlet_3.0_spec</artifactId>
+			<version>${geronimo.servlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- END - Servlet Dependencies -->
+				
+		<!-- BEGIN - Commons Dependencies -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
+		</dependency>
+		<!-- END - Commons Dependencies -->
+	</dependencies>
+
+</project>
