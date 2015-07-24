@@ -53,42 +53,63 @@ public class ManifestUtils {
 	
 	/**
 	 * Reads the manifest entries for this application. Returns empty if anything fails.
+	 * First tries from Exploded WAR, second Packaged WAR, third from classpath. 
+	 * if not found returns an empty map
 	 *
-	 * @return
+	 * @return Map<Object, Object> manifest entries if found otherwise empty map
 	 */
 	public Map<Object, Object> getManifestAttributes() {
-		Map<Object, Object> manifestAttributes = new HashMap<Object, Object>();
+		Map<Object, Object> manifestAttributes = null;
 		
-		FileInputStream fis = null;
-		try {
-			if (servletContext != null) {
-				final String appServerHome = servletContext.getRealPath("/");
-				final File manifestFile = new File(appServerHome, MANIFEST);
-				
-				fis = new FileInputStream(manifestFile);
-				Manifest mf = new Manifest(fis);
-				manifestAttributes = mf.getMainAttributes();
-			} else {
-			    manifestAttributes = getClassPathManifestAttributes();
-			}
-		} catch (Exception e) {
-			LOGGER.warn("Unable to read the manifest file from the servlet context. Trying to load from classpath.");
-			LOGGER.debug("Unable to read the manifest file", e);
-			
-			manifestAttributes = getClassPathManifestAttributes();
-		} finally {
-			IOUtils.closeQuietly(fis);
+		manifestAttributes = getExplodedWarManifestAttributes();
+		if (manifestAttributes == null) {
+		    manifestAttributes = getPackagedWarManifestAttributes();
+		}
+		if (manifestAttributes == null) {
+		    manifestAttributes = getClassPathManifestAttributes();
+		}
+		
+		if (manifestAttributes == null) {
+		    manifestAttributes = new HashMap<>();
 		}
 		return manifestAttributes;
+	}
+	
+	
+	/**
+	 * reads the manifest from a exploded WAR
+	 * 
+	 * @return Map<Object, Object> manifest entries if found otherwise empty map
+	 */
+	private Map<Object, Object> getExplodedWarManifestAttributes() {
+	    Map<Object, Object> manifestAttributes = null;
+	    
+	    FileInputStream fis = null;
+	    try {
+            if (servletContext != null) {
+                final String appServerHome = servletContext.getRealPath("");
+                final File manifestFile = new File(appServerHome, MANIFEST);
+                
+                fis = new FileInputStream(manifestFile);
+                Manifest mf = new Manifest(fis);
+                manifestAttributes = mf.getMainAttributes();
+            }
+        } catch (Exception e) {
+            LOGGER.warn("Unable to read the manifest file from the servlet context.");
+            LOGGER.debug("Unable to read the manifest file", e);            
+        } finally {
+            IOUtils.closeQuietly(fis);
+        }
+        return manifestAttributes;
 	}
 	
 	/**
 	 * Reads the manifest entries for this application (classpath). Returns empty if anything fails.
 	 *
-	 * @return
+	 * @return Map<Object, Object> manifest entries if found otherwise empty map
 	 */
 	private Map<Object, Object> getClassPathManifestAttributes() {
-		Map<Object, Object> manifestAttributes = new HashMap<Object, Object>();
+		Map<Object, Object> manifestAttributes = null;
 		try {
 		  Manifest manifest = new Manifest(getClass().getClassLoader().getResourceAsStream(MANIFEST));
 		  manifestAttributes = manifest.getMainAttributes();
@@ -98,4 +119,21 @@ public class ManifestUtils {
 		}
 		return manifestAttributes;
 	}
+	
+    /**
+     * Retrieve the Manifest from a packaged war
+     * 
+     * @return Map<Object, Object> manifest entries if found otherwise empty map
+     */
+    private Map<Object, Object> getPackagedWarManifestAttributes() {
+        Map<Object, Object> manifestAttributes = null;
+        try {
+          Manifest manifest = new Manifest(servletContext.getResourceAsStream(MANIFEST));
+          manifestAttributes = manifest.getMainAttributes();
+        } catch (IOException e) {
+            LOGGER.warn("Unable to read the manifest from the packaged war");
+            LOGGER.debug("Unable to read the manifest from the packaged", e);
+        }
+        return manifestAttributes;
+    }
 }
