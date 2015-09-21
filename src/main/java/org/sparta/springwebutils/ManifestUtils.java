@@ -130,7 +130,7 @@ public class ManifestUtils {
         try {
           Manifest manifest = new Manifest(servletContext.getResourceAsStream(MANIFEST));
           manifestAttributes = manifest.getMainAttributes();
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOGGER.warn("Unable to read the manifest from the packaged war");
             LOGGER.debug("Unable to read the manifest from the packaged", e);
         }
