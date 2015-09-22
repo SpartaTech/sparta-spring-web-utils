@@ -56,7 +56,7 @@ public class ManifestUtils {
 	 * First tries from Exploded WAR, second Packaged WAR, third from classpath. 
 	 * if not found returns an empty map
 	 *
-	 * @return Map<Object, Object> manifest entries if found otherwise empty map
+	 * @return Map manifest entries if found otherwise empty map
 	 */
 	public Map<Object, Object> getManifestAttributes() {
 		Map<Object, Object> manifestAttributes = null;
@@ -106,7 +106,7 @@ public class ManifestUtils {
 	/**
 	 * Reads the manifest entries for this application (classpath). Returns empty if anything fails.
 	 *
-	 * @return Map<Object, Object> manifest entries if found otherwise empty map
+	 * @return Map manifest entries if found otherwise empty map
 	 */
 	private Map<Object, Object> getClassPathManifestAttributes() {
 		Map<Object, Object> manifestAttributes = null;
@@ -123,14 +123,14 @@ public class ManifestUtils {
     /**
      * Retrieve the Manifest from a packaged war
      * 
-     * @return Map<Object, Object> manifest entries if found otherwise empty map
+     * @return Map manifest entries if found otherwise empty map
      */
     private Map<Object, Object> getPackagedWarManifestAttributes() {
         Map<Object, Object> manifestAttributes = null;
         try {
           Manifest manifest = new Manifest(servletContext.getResourceAsStream(MANIFEST));
           manifestAttributes = manifest.getMainAttributes();
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOGGER.warn("Unable to read the manifest from the packaged war");
             LOGGER.debug("Unable to read the manifest from the packaged", e);
         }

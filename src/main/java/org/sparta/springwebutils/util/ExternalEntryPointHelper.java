@@ -48,7 +48,7 @@ public final class ExternalEntryPointHelper {
 	 * @param typeBlacklist blackList by type
 	 * @param nameBlacklist blackList by name
 	 * @param maxDeepLevel How deep should algorithm go in the object
-	 * @return List<EntryPointParameter>
+	 * @return List
 	 */
 	public static List<EntryPointParameter> getInternalEntryPointParametersRecursively(Class<?> parameterType, Set<Class<?>> typeBlacklist, Set<String> nameBlacklist, int maxDeepLevel) {
 		return getInternalEntryPointParametersRecursively(parameterType, typeBlacklist, nameBlacklist, null, 1, maxDeepLevel);
@@ -60,10 +60,10 @@ public final class ExternalEntryPointHelper {
 	 * @param parameterType Type of parameter
 	 * @param typeBlacklist blackList by type
 	 * @param nameBlacklist blackList by name
-	 * @param parent
+	 * @param parent parent
 	 * @param level what the level of immersion now
 	 * @param maxDeepLevel How deep should algorithm go in the object
-	 * @return List<EntryPointParameter>
+	 * @return List
 	 */
 	private static List<EntryPointParameter> getInternalEntryPointParametersRecursively(Class<?> parameterType, Set<Class<?>> typeBlacklist, Set<String> nameBlacklist, Field parent, int level, int maxDeepLevel) {
 		final List<EntryPointParameter> list = new ArrayList<EntryPointParameter>();
@@ -104,7 +104,7 @@ public final class ExternalEntryPointHelper {
 	/**
 	 * Finds out if the supplied type is a simple element (primitive/wrapper, an primitive/wrapper array or a Collection instance)
 	 *
-	 * @param parameterType
+	 * @param parameterType type to check
 	 * @return boolean
 	 */
 	public static boolean isSimpleRequestParameter(Class<?> parameterType) {
@@ -118,8 +118,8 @@ public final class ExternalEntryPointHelper {
 	/**
 	 * Based on the input for scanning annotations, look for @ExternalEntryPoint and get the decorated name from it, if any.
 	 *
-	 * @param method
-	 * @param scanEntryPointAnnotation
+	 * @param method method to check
+	 * @param scanEntryPointAnnotation annotation
 	 * @return String
 	 */
 	public static String getEntryPointDecoratedName(Method method, boolean scanEntryPointAnnotation) {
@@ -142,10 +142,10 @@ public final class ExternalEntryPointHelper {
 	/**
 	 * Based on the input for scanning annotations, look for @ExternalEntryPoint and get the specific type black list elements.
 	 *
-	 * @param predefinedTypeBlacklist
-	 * @param method
-	 * @param scanEntryPointAnnotation
-	 * @return Set<Class<?>
+	 * @param predefinedTypeBlacklist black list
+	 * @param method method to check
+	 * @param scanEntryPointAnnotation annotation
+	 * @return Set
 	 */
 	public static Set<Class<?>> getConsolidatedTypeBlacklist(List<Class<?>> predefinedTypeBlacklist, Method method, boolean scanEntryPointAnnotation) {
 		final Set<Class<?>> consolidatedBlacklist = new HashSet<Class<?>>(predefinedTypeBlacklist);
@@ -176,10 +176,10 @@ public final class ExternalEntryPointHelper {
 	/**
 	 * Based on the input for scanning annotations, look for @ExternalEntryPoint and get the specific name black list elements.
 	 *
-	 * @param predefinedNameBlacklist
-	 * @param method
-	 * @param scanEntryPointAnnotation
-	 * @return Set<String>
+	 * @param predefinedNameBlacklist black list
+	 * @param method method to check 
+	 * @param scanEntryPointAnnotation annotation
+	 * @return Set
 	 */
 	public static Set<String> getConsolidatedNameBlacklist(List<String> predefinedNameBlacklist, Method method, boolean scanEntryPointAnnotation) {
 		final Set<String> consolidatedBlacklist = new HashSet<String>(predefinedNameBlacklist);

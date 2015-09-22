@@ -4,7 +4,7 @@
 	
 	<groupId>com.github.spartatech</groupId>
 	<artifactId>spring-web-utils</artifactId>
-	<version>1.3</version>
+	<version>1.3.1</version>
 	<packaging>jar</packaging>
 	
 	<name>Sparta Spring Web Utils</name>
