@@ -35,7 +35,7 @@ public class FileQueryLoader implements QueryLoader, InitializingBean {
 	/**
 	 * Constructor, receives the path for the folder containing all the queries
 	 * 
-	 * @param scriptsFolder
+	 * @param scriptsFolder folder with the scripts
 	 */
 	public FileQueryLoader(String scriptsFolder) {
 		this.scriptsFolder = scriptsFolder;
@@ -66,7 +66,7 @@ public class FileQueryLoader implements QueryLoader, InitializingBean {
 	 * Loads the query from the informed path and adds to cache
 	 * 
 	 * @param queryName File name for the query to be loaded 
-	 * @return requested Query,
+	 * @return requested Query
 	 * @throws IllegalStateException In case query was not found
 	 */
 	private String loadfromFromFile(String queryName) throws IllegalStateException {
