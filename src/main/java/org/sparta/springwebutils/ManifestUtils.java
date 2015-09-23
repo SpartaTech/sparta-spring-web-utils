@@ -90,6 +90,8 @@ public class ManifestUtils {
                 final String appServerHome = servletContext.getRealPath("");
                 final File manifestFile = new File(appServerHome, MANIFEST);
                 
+                LOGGER.debug("Using Manifest file:{}", manifestFile.getPath());
+                
                 fis = new FileInputStream(manifestFile);
                 Manifest mf = new Manifest(fis);
                 manifestAttributes = mf.getMainAttributes();
@@ -111,8 +113,10 @@ public class ManifestUtils {
 	private Map<Object, Object> getClassPathManifestAttributes() {
 		Map<Object, Object> manifestAttributes = null;
 		try {
-		  Manifest manifest = new Manifest(getClass().getClassLoader().getResourceAsStream(MANIFEST));
-		  manifestAttributes = manifest.getMainAttributes();
+		    LOGGER.debug("Using Manifest file:{}", getClass().getClassLoader().getResource(MANIFEST).getPath());
+		    
+		    Manifest manifest = new Manifest(getClass().getClassLoader().getResourceAsStream(MANIFEST));
+		    manifestAttributes = manifest.getMainAttributes();
 		} catch (IOException e) {
 			LOGGER.warn("Unable to read the manifest from the classpath");
 			LOGGER.debug("Unable to read the manifest from the classpath", e);
@@ -128,8 +132,10 @@ public class ManifestUtils {
     private Map<Object, Object> getPackagedWarManifestAttributes() {
         Map<Object, Object> manifestAttributes = null;
         try {
-          Manifest manifest = new Manifest(servletContext.getResourceAsStream(MANIFEST));
-          manifestAttributes = manifest.getMainAttributes();
+            LOGGER.debug("Using Manifest file:{}", servletContext.getResource(MANIFEST).getPath());
+            
+            Manifest manifest = new Manifest(servletContext.getResourceAsStream(MANIFEST));
+            manifestAttributes = manifest.getMainAttributes();
         } catch (Exception e) {
             LOGGER.warn("Unable to read the manifest from the packaged war");
             LOGGER.debug("Unable to read the manifest from the packaged", e);
