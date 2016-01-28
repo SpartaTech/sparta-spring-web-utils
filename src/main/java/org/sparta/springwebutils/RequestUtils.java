@@ -84,7 +84,7 @@ public class RequestUtils {
 	/**
 	 * Goes through @RequestMapping annotations from Spring and return a list of its elements.
 	 *
-	 * @return List<EntryPoint> List with all entry points and parameters
+	 * @return List with all entry points and parameters
 	 */
 	public List<EntryPoint> retrieveAllExternalEntryPoints() {
 		
@@ -212,7 +212,7 @@ public class RequestUtils {
 	 * Append more param types to blacklist
 	 * this method keeps the default blacklist and add these are extra ones
 	 *
-	 * @param paramTypesBlacklist extra list
+	 * @param extraParamTypesBlacklist extra list
 	 */
 	public void setExtraParamTypesBlacklist(List<Class<?>> extraParamTypesBlacklist) {
 		this.paramTypesBlacklist.addAll(extraParamTypesBlacklist);

@@ -22,14 +22,18 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate {
 
     /**
-     * @param dataSource
+     * constructor by datasource
+     * 
+     * @param dataSource data source to initialize 
      */
     public SpartaNamedParameterJdbcTemplate(DataSource dataSource) {
         super(dataSource);
     }
 
     /**
-     * @poram jdbcOperations
+     * Constructor by jdbcOperations
+     * 
+     * @param jdbcOperations jdbc operations to initialize
      */
     public SpartaNamedParameterJdbcTemplate(JdbcOperations jdbcOperations) {
         super(jdbcOperations);
@@ -93,9 +97,9 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
      * of arguments to bind to the query, mapping a single result row to a
      * Java object via a RowMapper.
      * @param sql SQL query to execute
-     * @param paramMap map of parameters to bind to the query
+     * @param paramSource parameters to bind to the query
      * (leaving it to the PreparedStatement to guess the corresponding SQL type)
-     * @param rowMapper object that will map one object per row
+     * @param requiredType class to map
      * @return the single mapped object (optionally)
      * @throws org.springframework.dao.IncorrectResultSizeDataAccessException
      * if the query does not return exactly one row, or does not return exactly
