@@ -5,7 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.AnnotatedBeanDefinitionReader;
 import org.springframework.context.support.GenericApplicationContext;
 
 /** 
@@ -45,20 +45,22 @@ public class SpringContextUtils {
      * Loads a context from the annotations config and inject all objects in the Map
      * 
      * @param extraBeans Extra beans for being injected
-     * @param packagesToScan Packages to scan the configuration
+     * @param config Configuration class
      * @return ApplicationContext generated
      */
-    public static ApplicationContext contextMergedBeans(Map<String, ?> extraBeans, String... packagesToScan) {
+    public static ApplicationContext contextMergedBeans(Map<String, ?> extraBeans, Class<?> config) {
         final DefaultListableBeanFactory parentBeanFactory = buildListableBeanFactory(extraBeans);
         
-        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(parentBeanFactory);
-        context.scan(packagesToScan);
+        //loads the annotation classes and add definitions in the context
+        GenericApplicationContext parentContext = new GenericApplicationContext(parentBeanFactory);
+        AnnotatedBeanDefinitionReader annotationReader = new AnnotatedBeanDefinitionReader(parentContext);
+        annotationReader.registerBean(config);
         
         //refreshed the context to create class and make autowires
-        context.refresh();
+        parentContext.refresh();
         
         //return the created context
-        return context;
+        return parentContext;
     }
 
     /**
