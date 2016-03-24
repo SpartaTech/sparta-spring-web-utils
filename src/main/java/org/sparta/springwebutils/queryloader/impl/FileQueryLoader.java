@@ -87,7 +87,8 @@ public class FileQueryLoader implements QueryLoader, InitializingBean {
 		    if (tokens != null && tokens.length > 0) {
     		    final Map<String, String> values = Arrays.stream(tokens).collect(Collectors.toMap(
     	            Function.identity(),
-    	            this::load
+    	            this::load,
+    	            (o, n) -> o
     	        ));
 		    
 		        sql = StrSubstitutor.replace(sql, values);
