@@ -1,11 +1,16 @@
 package org.sparta.springwebutils.queryloader.impl;
 
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.sparta.springwebutils.queryloader.QueryLoader;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
@@ -23,6 +28,8 @@ import org.springframework.util.Assert;
  *      </bean>
  * }
  * 
+ * OR create a bean on your @Configuration class like:
+ * <code>@Bean public QueryLoader queryLoader() { return new FileQueryLoader("/sql/"); }</code>
  * @author Daniel Conde Diehl
  *
  */
@@ -32,13 +39,15 @@ public class FileQueryLoader implements QueryLoader, InitializingBean {
 
 	private String scriptsFolder;
 	
+	
+	
 	/**
 	 * Constructor, receives the path for the folder containing all the queries
 	 * 
 	 * @param scriptsFolder folder with the scripts
 	 */
 	public FileQueryLoader(String scriptsFolder) {
-		this.scriptsFolder = scriptsFolder;
+		this.scriptsFolder = StringUtils.appendIfMissing(scriptsFolder, "/");
 	}
 	
 	@Override
@@ -71,7 +80,20 @@ public class FileQueryLoader implements QueryLoader, InitializingBean {
 	 */
 	private String loadfromFromFile(String queryName) throws IllegalStateException {
 		try (final InputStream is = getClass().getResourceAsStream(scriptsFolder + queryName + ".sql");) {
-			return StringUtils.join(IOUtils.readLines(is), ' ');
+		    String sql = StringUtils.join(IOUtils.readLines(is), ' ');
+		    
+		    // Look for tokens
+		    final String[] tokens = StringUtils.substringsBetween(sql, "${", "}");
+		    if (tokens != null && tokens.length > 0) {
+    		    final Map<String, String> values = Arrays.stream(tokens).collect(Collectors.toMap(
+    	            Function.identity(),
+    	            this::load
+    	        ));
+		    
+		        sql = StrSubstitutor.replace(sql, values);
+		    }
+		    
+			return sql;
 		} catch (Exception e) {
 			throw new IllegalStateException("Could not load query " + scriptsFolder + queryName, e);
 		}
@@ -81,5 +103,4 @@ public class FileQueryLoader implements QueryLoader, InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		Assert.notNull(scriptsFolder, "scriptsFolder cannot be null");
 	}
-
 }
