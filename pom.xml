@@ -4,7 +4,7 @@
 	
 	<groupId>com.github.spartatech</groupId>
 	<artifactId>spring-web-utils-java8</artifactId>
-	<version>1.3.4</version>
+	<version>1.3.6</version>
 	<packaging>jar</packaging>
 	
 	<name>Sparta Spring Web Utils</name>
@@ -57,6 +57,7 @@
 		<slf4j.version>[1.6.1,)</slf4j.version>
 		<commons-lang.version>[3.2.1,)</commons-lang.version>
 		<commons-io.version>[2.4,)</commons-io.version>
+		<commons-beanutils.version>[1.9.0,)</commons-beanutils.version>
 		<junit.version>[4.11,)</junit.version>
 		<jmockit.version>[1.15,)</jmockit.version>
 		<guava.version>18.0</guava.version>
@@ -233,6 +234,12 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>${commons-io.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>${commons-beanutils.version}</version>
 		</dependency>
 		<!-- END - Commons Dependencies -->
 	</dependencies>

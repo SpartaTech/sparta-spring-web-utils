@@ -1,6 +1,7 @@
 package org.sparta.springwebutils.queryloader.impl;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -80,7 +81,7 @@ public class FileQueryLoader implements QueryLoader, InitializingBean {
 	 */
 	private String loadfromFromFile(String queryName) throws IllegalStateException {
 		try (final InputStream is = getClass().getResourceAsStream(scriptsFolder + queryName + ".sql");) {
-		    String sql = StringUtils.join(IOUtils.readLines(is), ' ');
+		    String sql = StringUtils.join(IOUtils.readLines(is, StandardCharsets.UTF_8), IOUtils.LINE_SEPARATOR);
 		    
 		    // Look for tokens
 		    final String[] tokens = StringUtils.substringsBetween(sql, "${", "}");

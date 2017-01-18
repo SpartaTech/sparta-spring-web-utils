@@ -57,7 +57,7 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
 
         try {
             final T obj = super.queryForObject(sql, paramSource, rowMapper);
-            result = Optional.of(obj);
+            result = Optional.ofNullable(obj);
         } catch (IncorrectResultSizeDataAccessException e) {
             result = Optional.empty();
         }
@@ -84,7 +84,7 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
 
         try {
             final T obj = super.queryForObject(sql, paramMap, rowMapper);
-            result = Optional.of(obj);
+            result = Optional.ofNullable(obj);
         } catch (IncorrectResultSizeDataAccessException e) {
             result = Optional.empty();
         }
@@ -111,7 +111,7 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
 
         try {
             final T obj = super.queryForObject(sql, paramSource, requiredType);
-            result = Optional.of(obj);
+            result = Optional.ofNullable(obj);
         } catch (IncorrectResultSizeDataAccessException e) {
             result = Optional.empty();
         }
@@ -140,7 +140,7 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
 
         try {
             final T obj = super.queryForObject(sql, paramMap, requiredType);
-            result = Optional.of(obj);
+            result = Optional.ofNullable(obj);
         } catch (IncorrectResultSizeDataAccessException e) {
             result = Optional.empty();
         }

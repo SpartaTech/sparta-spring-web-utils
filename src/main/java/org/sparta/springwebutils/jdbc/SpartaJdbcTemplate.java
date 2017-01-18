@@ -69,7 +69,7 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
         
         try {
             final T obj = super.queryForObject(sql, requiredType);
-            result = Optional.of(obj);
+            result = Optional.ofNullable(obj);
         } catch (IncorrectResultSizeDataAccessException e) {
             result = Optional.empty();
         }
@@ -97,7 +97,7 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
         
         try {
             final T obj = super.queryForObject(sql, requiredType, args);
-            result = Optional.of(obj);
+            result = Optional.ofNullable(obj);
         } catch (IncorrectResultSizeDataAccessException e) {
             result = Optional.empty();
         }
@@ -125,7 +125,7 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
         
         try {
             final T obj = super.queryForObject(sql, args, requiredType);
-            result = Optional.of(obj);
+            result = Optional.ofNullable(obj);
         } catch (IncorrectResultSizeDataAccessException e) {
             result = Optional.empty();
         }
@@ -153,7 +153,7 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
         
         try {
             final T obj = super.queryForObject(sql, args, argTypes, requiredType);
-            result = Optional.of(obj);
+            result = Optional.ofNullable(obj);
         } catch (IncorrectResultSizeDataAccessException e) {
             result = Optional.empty();
         }
@@ -179,7 +179,7 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
         
         try {
             final T obj = super.queryForObject(sql, args, argTypes, rowMapper);
-            result = Optional.of(obj);
+            result = Optional.ofNullable(obj);
         } catch (IncorrectResultSizeDataAccessException e) {
             result = Optional.empty();
         }
@@ -205,7 +205,7 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
         
         try {
             final T obj = super.queryForObject(sql, args, rowMapper);
-            result = Optional.of(obj);
+            result = Optional.ofNullable(obj);
         } catch (IncorrectResultSizeDataAccessException e) {
             result = Optional.empty();
         }
@@ -231,7 +231,7 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
         
         try {
             final T obj = super.queryForObject(sql, rowMapper);
-            result = Optional.of(obj);
+            result = Optional.ofNullable(obj);
         } catch (IncorrectResultSizeDataAccessException e) {
             result = Optional.empty();
         }
@@ -257,7 +257,7 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
         
         try {
             final T obj = super.queryForObject(sql, rowMapper, args);
-            result = Optional.of(obj);
+            result = Optional.ofNullable(obj);
         } catch (IncorrectResultSizeDataAccessException e) {
             result = Optional.empty();
         }
