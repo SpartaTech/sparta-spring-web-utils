@@ -163,7 +163,85 @@ public class Test () {
 }
 ```
 
+##Database
 
+###JDBCTemplate
+We provide two extension classes for the original Spring JdbcTemplate. They are __SpartaJdbcTemplate__ and __SpartaNamedParameterJdbcTemplate__. The Sparta extended classes provide some missing extra methods for JdbcTemplate for Using Java8 Optional when getting an Object. 
+
+Without Sparta extensions the queryForObject returns _IncorrectResultSizeDataAccessException_ if the record was not found in the database, then you code would have to catch the exception and threat it. Instead with Sparta extension classes we are providing methods queryForOptionalObject, this methods returns an Optional object, which will return the value or empty if not found. 
+
+USAGE:
+
+```Java
+SpartaJdbcTemplate jdbcTemplate = new SpartaJdbcTemplate(dataSource);
+
+Optional<String> result = jdbcTemplate.queryForOptionalObject("select 1 from dual", String.class);
+```
+
+Same argument options for queryForObject are available for queryForOptionalObject, in SpartaJdbcTemplate and SpartaNamedParameterJdbcTemplate.
+
+##WhereClauseBuilder
+This functionality allows you to annotate a class and its fields, with this information the WhereClauseBuilder will generate a where clause for the database.
+
+Example:
+
+
+```Java
+public class TestWhereBuilder {
+	@QueryWhereClause("p.first_name = {this}")
+	private String firstName;
+	@QueryWhereClause("p.last_name = {this}")
+	private String lastName;
+	
+	@QueryWhereClauses({
+			@QueryWhereClause(value = "p.age > {this.min}", fieldTypes=Types.DOUBLE),
+			@QueryWhereClause(value = "p.age < {this.max}", fieldTypes=Types.DOUBLE)
+	})
+	private TestRangeObj<Long> age;
+   ...
+}
+```
+```Java
+public class TestWhereBuilder {
+	@QueryWhereClause("p.first_name = {this}")
+	private String firstName;
+	@QueryWhereClause("p.last_name = {this}")
+	private String lastName;
+	
+	@QueryWhereClauses({
+			@QueryWhereClause(value = "p.age > {this.min}", fieldTypes=Types.DOUBLE),
+			@QueryWhereClause(value = "p.age < {this.max}", fieldTypes=Types.DOUBLE)
+	})
+	private TestRangeObj<Long> age;
+   ...
+}
+```
+
+```Java
+public class TestRangeObj<T> {
+	private T min;
+	private T max;
+	...
+}
+```
+
+```Java
+	public String test() throws Exception {
+		final TestWhereBuilder testObj = new TestWhereBuilder();
+		testObj.setFirstName("Daniel");
+		testObj.setLastName("Diehl");
+		TestRangeObj<Long> range = new TestRangeObj<>();
+		range.setMin(21L);
+		range.setMax(60L);
+		testObj.setAge(range);
+		
+		final MapSqlParameterSource params = new MapSqlParameterSource();
+		final String where = QueryWhereClauseBuilder.buildWhereClause(testObj, params);
+		
+		final SpartaNamedParameterJdbcTemplate jdbc = new SpartaNamedParameterJdbcTemplate(dataSource);
+		return jdbc.query("SELECT * FROM table WHERE" + where, params, new TestingRowMapper());
+		
+```
 
 
 
