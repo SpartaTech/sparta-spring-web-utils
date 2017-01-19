@@ -1,4 +1,6 @@
 # sparta-spring-web-utils
+[![Build Status](https://travis-ci.org/SpartaTech/sparta-spring-web-utils.svg?branch=master)](https://travis-ci.org/SpartaTech/sparta-spring-web-utils)
+
 Spring Web Utility library. Includes functionalities to enhance the use of spring-mvc framework. 
 
 ___This is the Java 8 supporting version. If you're still using java 7 see java1.7 branch.___
