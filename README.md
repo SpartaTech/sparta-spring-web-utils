@@ -1,5 +1,5 @@
 # sparta-spring-web-utils
-[![Build Status](https://travis-ci.org/SpartaTech/sparta-spring-web-utils.svg?branch=master)](https://travis-ci.org/SpartaTech/sparta-spring-web-utils)
+[![Build Status](https://travis-ci.org/SpartaTech/sparta-spring-web-utils.svg?branch=Java1.8)](https://travis-ci.org/SpartaTech/sparta-spring-web-utils)
 
 Spring Web Utility library. Includes functionalities to enhance the use of spring-mvc framework. 
 
