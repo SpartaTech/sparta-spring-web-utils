@@ -216,7 +216,7 @@ public class YourService {
 
 
 
-And then the applications that wants to use you application just needs to create a bean for YourApi and use the Methods. 
+And then the applications that want to use you application just need to create a bean for YourApi and use the methods. 
 
 Example:
 
@@ -241,7 +241,7 @@ public class Test () {
 ```
 
 #####By Config Class
-The used is pretty much the same as the previous method. The only difference is that you'll be using Config class to configure your beans instead of XML file.
+This usage is pretty much the same as the previous method. The only difference is that you'll be using a config class to configure your beans instead of XML file.
 
 __YourApi.class__
 
@@ -323,7 +323,7 @@ public class YourService {
 
 
 
-And then the applications that wants to use you application just needs to create a bean for YourApi and use the Methods. 
+And then the applications that want to use you application just need to create a bean for YourApi and use the methods. 
 
 Example:
 
@@ -352,9 +352,9 @@ public class Test () {
 ##Database
 
 ###JDBCTemplate
-We provide two extension classes for the original Spring JdbcTemplate. They are __SpartaJdbcTemplate__ and __SpartaNamedParameterJdbcTemplate__. The Sparta extended classes provide some missing extra methods for JdbcTemplate for Using Java8 Optional when getting an Object. 
+We provide two extension classes for the original Spring JdbcTemplate. They are __SpartaJdbcTemplate__ and __SpartaNamedParameterJdbcTemplate__. The Sparta extended classes provide some missing extra methods for JdbcTemplate using Java8 Optional when getting an Object. 
 
-Without Sparta extensions the queryForObject returns _IncorrectResultSizeDataAccessException_ if the record was not found in the database, then you code would have to catch the exception and threat it. Instead with Sparta extension classes we are providing methods queryForOptionalObject, this methods returns an Optional object, which will return the value or empty if not found. 
+Without Sparta extensions the queryForObject returns _IncorrectResultSizeDataAccessException_ if the record was not found in the database, then your code would have to catch the exception and threat it. In Sparta extension classes we are providing methods queryForOptionalObject, these methods return an Optional object, which will contain either the value or empty if not found. 
 
 USAGE:
 
@@ -364,10 +364,10 @@ SpartaJdbcTemplate jdbcTemplate = new SpartaJdbcTemplate(dataSource);
 Optional<String> result = jdbcTemplate.queryForOptionalObject("select 1 from dual", String.class);
 ```
 
-Same argument options for queryForObject are available for queryForOptionalObject, in SpartaJdbcTemplate and SpartaNamedParameterJdbcTemplate.
+Same argument options for queryForObject in JdbcTemplte and NamedParameterJdbcTemplate are available for queryForOptionalObject, in SpartaJdbcTemplate and SpartaNamedParameterJdbcTemplate.
 
 ##WhereClauseBuilder
-This functionality allows you to annotate a class and its fields, with this information the WhereClauseBuilder will generate a where clause for the database.
+This functionality allows you to annotate a class and its fields. With the annotations information the WhereClauseBuilder will generate a where clause for the database query.
 
 Example:
 
