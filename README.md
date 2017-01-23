@@ -53,7 +53,9 @@ The basic use of it is:
 public class AppConfig {
 	@Bean
 	public RequestUtils requestUtilsAnnotationsEnabled(){
-		return new RequestUtils();
+		RequestUtils ru = new RequestUtils();
+		ru.setScanEntryPointAnnotation(false);
+		return ru;
 	} 
 }
 ```
