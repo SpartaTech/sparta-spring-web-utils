@@ -111,8 +111,6 @@ In this case your bean definition will be:
 	@Bean
 	public RequestUtils requestUtilsClearParamTypeBlackList() {
 		RequestUtils ru = new RequestUtils();
-		ru.setScanEntryPointAnnotation(false);
-		
 		return ru;
 	}
 ```
