@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -27,6 +28,7 @@ import mockit.Tested;
  *
  * History:
  *  Jan 18, 2017 - Daniel Conde Diehl
+ *  Fev 02, 2017 - Daniel Conde Diehl - Adding tests for multiple rows issue.EmptyResultDataAccessException
  */
 
 public class SpartaJdbcTemplateTest {
@@ -59,6 +61,8 @@ public class SpartaJdbcTemplateTest {
 		new SpartaJdbcTemplate();
 	}
 	
+	/* ***** BEGIN: TEST FOR SQL, CLASS *********** */
+	
 	@Test
 	public void testQueryForOptionalObjectNull () throws Exception {
 		final String sql = "";
@@ -89,15 +93,28 @@ public class SpartaJdbcTemplateTest {
 		final String sql = "";
 		new Expectations(tested) {{
 			tested.queryForObject(sql, String.class);
-			result = new IncorrectResultSizeDataAccessException(1);
+			result = new EmptyResultDataAccessException(1);
 		}};
 
 		Optional<String> actual = tested.queryForOptionalObject(sql, String.class);
 		Assert.assertFalse(actual.isPresent());
 	}
 	
+	@Test(expected=IncorrectResultSizeDataAccessException.class)
+	public void testQueryForOptionalMultipleRows () throws Exception {
+		final String sql = "";
+		new Expectations(tested) {{
+			tested.queryForObject(sql, String.class);
+			result = new IncorrectResultSizeDataAccessException(1);
+		}};
+
+		tested.queryForOptionalObject(sql, String.class);
+	}
+	/* ***** END: TEST FOR SQL, CLASS ******* */
 	
 	
+	
+	/* ***** BEGIN: sql, rowMapper ***** */
 	@Test
 	public void testQueryForOptionalObject2Null () throws Exception {
 		final String sql = "";
@@ -151,15 +168,36 @@ public class SpartaJdbcTemplateTest {
 		
 		new Expectations(tested) {{
 			tested.queryForObject(sql, rowMapper);
-			result = new IncorrectResultSizeDataAccessException(1);
+			result = new EmptyResultDataAccessException(1);
 		}};
 
 		Optional<String> actual = tested.queryForOptionalObject(sql, rowMapper);
 		Assert.assertFalse(actual.isPresent());
 	}
+	
+	@Test(expected=IncorrectResultSizeDataAccessException.class)
+	public void testQueryForOptional2ObjectMultipleRows () throws Exception {
+		final String sql = "";
+		
+		final RowMapper<String> rowMapper = new RowMapper<String>() {
+			@Override
+			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return "teste"; 
+			}
+		};
+		
+		new Expectations(tested) {{
+			tested.queryForObject(sql, rowMapper);
+			result = new IncorrectResultSizeDataAccessException(1);
+		}};
 
+		tested.queryForOptionalObject(sql, rowMapper);
+	}
+	/* ***** END: sql, rowMapper ***** */
 	
 	
+	
+	/* ***** BEGIN: sql, class, params ******* */
 	@Test
 	public void testQueryForOptionalObject3Null () throws Exception {
 		final String sql = "";
@@ -193,18 +231,30 @@ public class SpartaJdbcTemplateTest {
 		final Object[] params = new Object[1];
 		new Expectations(tested) {{
 			tested.queryForObject(sql, String.class, params);
-			result = new IncorrectResultSizeDataAccessException(1);
+			result = new EmptyResultDataAccessException(1);
 		}};
 
 		Optional<String> actual = tested.queryForOptionalObject(sql, String.class, params);
 		Assert.assertFalse(actual.isPresent());
 	}
 	
+	@Test(expected=IncorrectResultSizeDataAccessException.class)
+	public void testQueryForOptionalObject3MultipleRows () throws Exception {
+		final String sql = "";
+		final Object[] params = new Object[1];
+		new Expectations(tested) {{
+			tested.queryForObject(sql, String.class, params);
+			result = new IncorrectResultSizeDataAccessException(1);
+		}};
+
+		tested.queryForOptionalObject(sql, String.class, params);
+	}
+	/* ***** END: sql, class, params ******* */
 	
 	
 
 	
-	
+	/* ***** BEGIN: sql, params, class ******* */
 	@Test
 	public void testQueryForOptionalObject4Null () throws Exception {
 		final String sql = "";
@@ -238,18 +288,31 @@ public class SpartaJdbcTemplateTest {
 		final Object[] params = new Object[1];
 		new Expectations(tested) {{
 			tested.queryForObject(sql, params, String.class);
-			result = new IncorrectResultSizeDataAccessException(1);
+			result = new EmptyResultDataAccessException(1);
 		}};
 
 		Optional<String> actual = tested.queryForOptionalObject(sql, params, String.class);
 		Assert.assertFalse(actual.isPresent());
 	}
 	
+	@Test(expected=IncorrectResultSizeDataAccessException.class)
+	public void testQueryForOptionalObject4MultipleRows () throws Exception {
+		final String sql = "";
+		final Object[] params = new Object[1];
+		new Expectations(tested) {{
+			tested.queryForObject(sql, params, String.class);
+			result = new IncorrectResultSizeDataAccessException(1);
+		}};
+
+		tested.queryForOptionalObject(sql, params, String.class);
+	}
+	/* ***** END: sql, params, class ******* */
 	
 	
 
 	
 	
+	/* ***** BEGIN: sql, params, rowMapper ******* */
 	@Test
 	public void testQueryForOptionalObject5Null () throws Exception {
 		final String sql = "";
@@ -305,18 +368,38 @@ public class SpartaJdbcTemplateTest {
 		
 		new Expectations(tested) {{
 			tested.queryForObject(sql, params, rowMapper);
-			result = new IncorrectResultSizeDataAccessException(1);
+			result = new EmptyResultDataAccessException(1);
 		}};
 
 		Optional<String> actual = tested.queryForOptionalObject(sql, params, rowMapper);
 		Assert.assertFalse(actual.isPresent());
 	}
 	
+	@Test(expected=IncorrectResultSizeDataAccessException.class)
+	public void testQueryForOptionalObject5MultipleRows () throws Exception {
+		final String sql = "";
+		final Object[] params = new Object[1];
+		final RowMapper<String> rowMapper = new RowMapper<String>() {
+			@Override
+			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return "teste"; 
+			}
+		};
+		
+		new Expectations(tested) {{
+			tested.queryForObject(sql, params, rowMapper);
+			result = new IncorrectResultSizeDataAccessException(1);
+		}};
+
+		tested.queryForOptionalObject(sql, params, rowMapper);
+	}
+	/* ***** END: sql, params, rowMapper ******* */
 	
 	
 
 	
 	
+	/* ***** BEGIN: sql, rowMapper, params ******* */
 	@Test
 	public void testQueryForOptionalObject6Null () throws Exception {
 		final String sql = "";
@@ -372,13 +455,32 @@ public class SpartaJdbcTemplateTest {
 		
 		new Expectations(tested) {{
 			tested.queryForObject(sql, rowMapper, params);
-			result = new IncorrectResultSizeDataAccessException(1);
+			result = new EmptyResultDataAccessException(1);
 		}};
 
 		Optional<String> actual = tested.queryForOptionalObject(sql, rowMapper, params);
 		Assert.assertFalse(actual.isPresent());
 	}
 	
+	@Test(expected=IncorrectResultSizeDataAccessException.class)
+	public void testQueryForOptionalObject6MultipleRows () throws Exception {
+		final String sql = "";
+		final Object[] params = new Object[1];
+		final RowMapper<String> rowMapper = new RowMapper<String>() {
+			@Override
+			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return "teste"; 
+			}
+		};
+		
+		new Expectations(tested) {{
+			tested.queryForObject(sql, rowMapper, params);
+			result = new IncorrectResultSizeDataAccessException(1);
+		}};
+
+		tested.queryForOptionalObject(sql, rowMapper, params);
+	}
+	/* ***** END: sql, rowMapper, params ******* */
 	
 	
 	
@@ -387,7 +489,7 @@ public class SpartaJdbcTemplateTest {
 	
 
 	
-	
+	/* ***** BEGIN: sql, params, paramTypes, rowMapper ******* */
 	@Test
 	public void testQueryForOptionalObject7Null () throws Exception {
 		final String sql = "";
@@ -446,17 +548,17 @@ public class SpartaJdbcTemplateTest {
 		
 		new Expectations(tested) {{
 			tested.queryForObject(sql, params, paramType, rowMapper);
-			result = new IncorrectResultSizeDataAccessException(1);
+			result = new EmptyResultDataAccessException(1);
 		}};
 
 		Optional<String> actual = tested.queryForOptionalObject(sql, params, paramType, rowMapper);
 		Assert.assertFalse(actual.isPresent());
 	}
+	/* ***** END: sql, params, paramTypes, rowMapper ******* */
 	
 	
 	
-	
-	
+	/* ***** BEGIN: sql, params, paramTypes, class ******* */
 	@Test
 	public void testQueryForOptionalObject8Null () throws Exception {
 		final String sql = "";
@@ -493,10 +595,24 @@ public class SpartaJdbcTemplateTest {
 		final int[] paramType = new int[1];
 		new Expectations(tested) {{
 			tested.queryForObject(sql, params, paramType, String.class);
-			result = new IncorrectResultSizeDataAccessException(1);
+			result = new EmptyResultDataAccessException(1);
 		}};
 
 		Optional<String> actual = tested.queryForOptionalObject(sql, params, paramType, String.class);
 		Assert.assertFalse(actual.isPresent());
 	}
+	
+	@Test(expected=IncorrectResultSizeDataAccessException.class)
+	public void testQueryForOptionalObject8MultipleRows () throws Exception {
+		final String sql = "";
+		final Object[] params = new Object[1];
+		final int[] paramType = new int[1];
+		new Expectations(tested) {{
+			tested.queryForObject(sql, params, paramType, String.class);
+			result = new IncorrectResultSizeDataAccessException(1);
+		}};
+
+		tested.queryForOptionalObject(sql, params, paramType, String.class);
+	}
+	/* ***** END: sql, params, paramTypes, class ******* */
 }

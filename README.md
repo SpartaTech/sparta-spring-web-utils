@@ -22,7 +22,7 @@ Usage:
 
 Java-configuration-based:
 
-```
+```Java
 @Configuration
 public class Config {
    @Bean
@@ -34,7 +34,7 @@ public class Config {
 
 or, xml based configuration
 
-```
+```Xml
 <bean id="manifestUtils" class="org.sparta.springwebutils.ManifestUtils"/>
 ```
 
@@ -46,12 +46,85 @@ or, xml based configuration
 </ol>
 
 ####Request Utils
+Request Utils is a functionality that provides a way to list all HTTP entry points (@RequestMapping methods in a @controller class), allowing you to build interfaces to show/call your endpoints. 
+The basic use of it is: 
+```Java
+@Configuration
+public class AppConfig {
+	@Bean
+	public RequestUtils requestUtilsAnnotationsEnabled(){
+		RequestUtils ru = new RequestUtils();
+		ru.setScanEntryPointAnnotation(false);
+		return ru;
+	} 
+}
+```
+
+```Java
+public class MyClass {
+   @Autowired
+   private RequestUtils requestUtils;
+   
+   public void myMethod() {
+      final List<EntryPoint> entryPoints = requestUtils.retrieveAllExternalEntryPoints();
+      //do whatever you need to do with the entry points
+   }
+}
+```
+
+You can also use the @ExternalEntryPoint annotation to you controller if you need more flexibility in the retrieval of the entry-points. Example:
+
+```Java
+@Controller
+public class MethodAnnotatedController {
+	
+	@ExternalEntryPoint(name="new_name", typeBlacklist=String.class, nameBlacklist="outToo")
+	@RequestMapping(value="/methodAnnotatedController/testBlacklists", method={RequestMethod.POST, RequestMethod.GET})
+	public ModelAndView testBlacklists(String out, Integer in, @RequestParam(defaultValue="true", required=false) Boolean inToo, Long outToo) {
+		return new ModelAndView();
+	}
+}
+```
+
+Or annotating class:
+
+```Java
+@Controller
+@ExternalEntryPoint(typeBlacklist=Object.class, nameBlacklist={"out", "out_two"})
+public class ClassAnnotatedController {
+	
+	@RequestMapping(value="/classAnnotatedController/testTypeBlacklist", method=RequestMethod.POST)
+	public ModelAndView testTypeBlacklist(String inOne, Integer inTwo, Object fileOut) {
+		return new ModelAndView();
+	}
+	
+	@RequestMapping(value="/classAnnotatedController/testNameBlacklist", method=RequestMethod.GET)
+	public ModelAndView testNameBlacklist(String out, Integer in, Boolean inToo, @RequestParam("out_two") Long outToo) {
+		return new ModelAndView();
+	}
+}
+```
+
+In this case your bean definition will be:
+
+```Java
+	@Bean
+	public RequestUtils requestUtilsClearParamTypeBlackList() {
+		RequestUtils ru = new RequestUtils();
+		return ru;
+	}
+```
+
+
 
 
 ####SpringContext Utils
 
-Useful class for creating libraries that has its own context. It will not share context bean from the application which is including the library. Basically the contextMerger allows you to merge objects into an context 
+Useful class for creating libraries that has its own context. It will not share context bean from the application which is including the library. Basically the contextMerger allows you to merge objects into an context.
 
+There are two ways of using it. First one is by context in XML file, the second one is by context on Config class.
+
+#####Context on XML file
 
 Usage:
 
@@ -59,7 +132,7 @@ You can use contextMergedBean to generate and API class which will be exposed to
 
 __YourApi.class__
 
-```
+```Java
 public class YourApi {
 	private static Logger LOGGER = LoggerFactory.getLogger(YourApi.class);
 	
@@ -73,7 +146,7 @@ public class YourApi {
 	 * @param param1 Example param
 	 * @param param2 Example param
 	 */
-	public BsoSoapClientApi(String param1, String param2) {
+	public YourApi(String param1, String param2) {
 		initContext(param1, param2);
 	}
 	
@@ -111,7 +184,7 @@ public class YourApi {
 __META-INF/spring/your-api-beans.xml__:
 
 
-```
+```XML
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -127,7 +200,7 @@ __META-INF/spring/your-api-beans.xml__:
 __YourService.class__:
 
 
-```
+```Java
 @Service
 public class YourService {
   /**
@@ -143,11 +216,11 @@ public class YourService {
 
 
 
-And then the applications that wants to use you application just needs to create a bean for YourApi and use the Methods. 
+And then the applications that want to use you application just need to create a bean for YourApi and use the methods. 
 
 Example:
 
-```
+```Java
 @Configuration
 public class Config {
   @Bean
@@ -167,12 +240,121 @@ public class Test () {
 }
 ```
 
+#####By Config Class
+This usage is pretty much the same as the previous method. The only difference is that you'll be using a config class to configure your beans instead of XML file.
+
+__YourApi.class__
+
+```Java
+public class YourApi {
+	private static Logger LOGGER = LoggerFactory.getLogger(YourApi.class);
+	
+	private ApplicationContext context;
+
+	private YourService service;
+	
+	/**
+	 * Load context 
+	 * 
+	 * @param param1 Example param
+	 * @param param2 Example param
+	 */
+	public YourApi(String param1, String param2) {
+		initContext(param1, param2);
+	}
+	
+	/**
+	 * Initializes context with provided data
+	 * 
+	 * @param param1 Example param
+	 * @param param2 Example param
+	 */
+	private void initContext(String param1, String param2) {
+		LOGGER.info("Initializing your-api context");
+		
+		Map<String, Object> extraParams = new HashMap<String, Object>(); 
+		extraParams.put("param1", param1);
+		extraParams.put("param2", param2);
+		
+		context = SpringContextUtils.contextMergedBeans(extraParams, LibConfig.class);
+		service = context.getBean(YourService.class);
+		
+		LOGGER.info("your-api context initialized");
+	}
+	
+	/**
+	 * Calls Example Method
+	 * 
+	 * @return String Example return
+	 */
+	public String helloWorld() {
+		return service.helloWorld();
+	}
+```
+
+
+
+__LibConfig__:
+
+
+```Java
+@ComponentScan("com.youcompany.yourproject")
+public class LibConfig {
+}
+```
+
+
+__YourService.class__:
+
+
+```Java
+@Service
+public class YourService {
+  /**
+   * Example method in the service.
+   *
+   * @return String helloworld
+   */
+  public String helloWorld() {
+     return "Hello World";
+  }
+}
+```
+
+
+
+And then the applications that want to use you application just need to create a bean for YourApi and use the methods. 
+
+Example:
+
+```Java
+@Configuration
+public class Config {
+  @Bean
+  public YourApi yourApi() {
+     return new YourApi("value1", "value2");
+  }
+}
+
+@Component
+public class Test () {
+   @Autowired
+   private YourApi yourApi;
+
+   public void test() {
+      System.out.println(yourApi.helloWorld());
+   }
+}
+```
+
+
+
 ##Database
 
 ###JDBCTemplate
-We provide two extension classes for the original Spring JdbcTemplate. They are __SpartaJdbcTemplate__ and __SpartaNamedParameterJdbcTemplate__. The Sparta extended classes provide some missing extra methods for JdbcTemplate for Using Java8 Optional when getting an Object. 
+We provide two extension classes for the original Spring JdbcTemplate. They are __SpartaJdbcTemplate__ and __SpartaNamedParameterJdbcTemplate__. The Sparta extended classes provide some missing extra methods for JdbcTemplate using Java8 Optional when getting an Object. 
 
-Without Sparta extensions the queryForObject returns _IncorrectResultSizeDataAccessException_ if the record was not found in the database, then you code would have to catch the exception and threat it. Instead with Sparta extension classes we are providing methods queryForOptionalObject, this methods returns an Optional object, which will return the value or empty if not found. 
+Without Sparta extensions the queryForObject returns _IncorrectResultSizeDataAccessException_ if the record was not found in the database, then your code would have to catch the exception and threat it. In Sparta extension classes we are providing methods queryForOptionalObject, these methods return an Optional object, which will contain either the value or empty if not found. 
 
 USAGE:
 
@@ -182,10 +364,10 @@ SpartaJdbcTemplate jdbcTemplate = new SpartaJdbcTemplate(dataSource);
 Optional<String> result = jdbcTemplate.queryForOptionalObject("select 1 from dual", String.class);
 ```
 
-Same argument options for queryForObject are available for queryForOptionalObject, in SpartaJdbcTemplate and SpartaNamedParameterJdbcTemplate.
+Same argument options for queryForObject in JdbcTemplte and NamedParameterJdbcTemplate are available for queryForOptionalObject, in SpartaJdbcTemplate and SpartaNamedParameterJdbcTemplate.
 
 ##WhereClauseBuilder
-This functionality allows you to annotate a class and its fields, with this information the WhereClauseBuilder will generate a where clause for the database.
+This functionality allows you to annotate a class and its fields. With the annotations information the WhereClauseBuilder will generate a where clause for the database query.
 
 Example:
 

@@ -7,7 +7,7 @@ import java.util.Optional;
 import javax.sql.DataSource;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -47,7 +47,7 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
      * @param paramSource container of arguments to bind to the query
      * @param rowMapper object that will map one object per row
      * @return the single mapped object (optionally)
-     * @throws org.springframework.dao.IncorrectResultSizeDataAccessException
+     * @throws org.springframework.dao.EmptyResultDataAccessException
      * if the query does not return exactly one row, or does not return exactly
      * one column in that row
      * @throws org.springframework.dao.DataAccessException if the query fails
@@ -58,7 +58,7 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
         try {
             final T obj = super.queryForObject(sql, paramSource, rowMapper);
             result = Optional.ofNullable(obj);
-        } catch (IncorrectResultSizeDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             result = Optional.empty();
         }
 
@@ -74,7 +74,7 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
      * (leaving it to the PreparedStatement to guess the corresponding SQL type)
      * @param rowMapper object that will map one object per row
      * @return the single mapped object (optionally)
-     * @throws org.springframework.dao.IncorrectResultSizeDataAccessException
+     * @throws org.springframework.dao.EmptyResultDataAccessException
      * if the query does not return exactly one row, or does not return exactly
      * one column in that row
      * @throws org.springframework.dao.DataAccessException if the query fails
@@ -85,7 +85,7 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
         try {
             final T obj = super.queryForObject(sql, paramMap, rowMapper);
             result = Optional.ofNullable(obj);
-        } catch (IncorrectResultSizeDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             result = Optional.empty();
         }
 
@@ -101,7 +101,7 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
      * (leaving it to the PreparedStatement to guess the corresponding SQL type)
      * @param requiredType class to map
      * @return the single mapped object (optionally)
-     * @throws org.springframework.dao.IncorrectResultSizeDataAccessException
+     * @throws org.springframework.dao.EmptyResultDataAccessException
      * if the query does not return exactly one row, or does not return exactly
      * one column in that row
      * @throws org.springframework.dao.DataAccessException if the query fails
@@ -112,7 +112,7 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
         try {
             final T obj = super.queryForObject(sql, paramSource, requiredType);
             result = Optional.ofNullable(obj);
-        } catch (IncorrectResultSizeDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             result = Optional.empty();
         }
 
@@ -129,7 +129,7 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
      * (leaving it to the PreparedStatement to guess the corresponding SQL type)
      * @param requiredType the type that the result object is expected to match
      * @return the result object of the required type (optionally)
-     * @throws org.springframework.dao.IncorrectResultSizeDataAccessException
+     * @throws org.springframework.dao.EmptyResultDataAccessException
      * if the query does not return exactly one row, or does not return exactly
      * one column in that row
      * @throws org.springframework.dao.DataAccessException if the query fails
@@ -141,7 +141,7 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
         try {
             final T obj = super.queryForObject(sql, paramMap, requiredType);
             result = Optional.ofNullable(obj);
-        } catch (IncorrectResultSizeDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             result = Optional.empty();
         }
 

@@ -1,12 +1,14 @@
 package org.sparta.springwebutils;
 
 import java.util.Map;
+import java.util.Properties;
 
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotatedBeanDefinitionReader;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.core.env.PropertiesPropertySource;
 
 /** 
  * Utility class for handling with Spring context loading
@@ -63,6 +65,43 @@ public class SpringContextUtils {
         return parentContext;
     }
 
+    /**
+     * Loads a context from the annotations config and inject all objects in the Map. 
+     * Loads all the properties to be used as Value annotation.
+     * 
+     * @param extraBeans Extra beans for being injected
+     * @param config Configuration class
+     * @return ApplicationContext generated
+     */
+    public static ApplicationContext contextMergedBeans(Map<String, ?> extraBeans, Class<?> config, Properties properties) {
+        final DefaultListableBeanFactory parentBeanFactory = buildListableBeanFactory(extraBeans);
+        
+        //loads the annotation classes and add definitions in the context
+        GenericApplicationContext parentContext = new GenericApplicationContext(parentBeanFactory);
+        setProperties(parentContext, properties);
+        
+        AnnotatedBeanDefinitionReader annotationReader = new AnnotatedBeanDefinitionReader(parentContext);
+        annotationReader.registerBean(config);
+        
+        //refreshed the context to create class and make autowires
+        parentContext.refresh();
+        
+        //return the created context
+        return parentContext;
+    }
+
+    /**
+     * Set properties into the context
+     * 
+     * @param newContext new context to add properties
+     * @param properties properties to add to the context
+     */
+    private static void setProperties(GenericApplicationContext newContext, Properties properties) {
+        PropertiesPropertySource pps = new PropertiesPropertySource("external-props", properties);
+        newContext.getEnvironment().getPropertySources().addFirst(pps);
+    }
+    
+    
     /**
      * Builds a listable bean factory with the given beans
      * 
