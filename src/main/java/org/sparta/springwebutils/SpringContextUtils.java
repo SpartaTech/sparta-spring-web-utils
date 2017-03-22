@@ -71,6 +71,7 @@ public class SpringContextUtils {
      * 
      * @param extraBeans Extra beans for being injected
      * @param config Configuration class
+     * @param properties Properties to be loaded onto the context
      * @return ApplicationContext generated
      */
     public static ApplicationContext contextMergedBeans(Map<String, ?> extraBeans, Class<?> config, Properties properties) {
@@ -91,7 +92,7 @@ public class SpringContextUtils {
     }
 
     /**
-     * Set properties into the context
+     * Set properties into the context.
      * 
      * @param newContext new context to add properties
      * @param properties properties to add to the context
@@ -103,10 +104,10 @@ public class SpringContextUtils {
     
     
     /**
-     * Builds a listable bean factory with the given beans
+     * Builds a listable bean factory with the given beans.
      * 
      * @param extraBeans
-     * @return
+     * @return new Created BeanFactory
      */
     private static DefaultListableBeanFactory buildListableBeanFactory(Map<String, ?> extraBeans) {
         //new empty context

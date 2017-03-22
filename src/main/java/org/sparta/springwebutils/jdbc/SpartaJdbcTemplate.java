@@ -58,8 +58,10 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
      * <p>This method is useful for running static SQL with a known outcome.
      * The query is expected to be a single row/single column query; the returned
      * result will be directly mapped to the corresponding object type.
+     * 
      * @param sql SQL query to execute
      * @param requiredType the type that the result object is expected to match
+     * @param <T> The return object type
      * @return the result object of the required type (optionally)
      * @throws DataAccessException if there is any problem executing the query
      * @see #queryForOptionalObject(String, Object[], Class)
@@ -82,9 +84,11 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
      * list of arguments to bind to the query, expecting a result object (optional).
      * <p>The query is expected to be a single row/single column query; the returned
      * result will be directly mapped to the corresponding object type.
+     * 
      * @param sql SQL query to execute
      * @param requiredType the type that the result object is expected to match
      * @param args arguments to bind to the query
+     * @param <T> The return object type
      * (leaving it to the PreparedStatement to guess the corresponding SQL type);
      * may also contain {@link SqlParameterValue} objects which indicate not
      * only the argument value but also the SQL type and optionally the scale
@@ -116,6 +120,7 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
      * may also contain {@link SqlParameterValue} objects which indicate not
      * only the argument value but also the SQL type and optionally the scale
      * @param requiredType the type that the result object is expected to match
+     * @param <T> The return object type
      * @return the result object of the required type (optionally)
      * @throws DataAccessException if the query fails
      * @see #queryForOptionalObject(String, Class)
@@ -143,6 +148,7 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
      * @param argTypes SQL types of the arguments
      * (constants from {@code java.sql.Types})
      * @param requiredType the type that the result object is expected to match
+     * @param <T> The return object type
      * @return the result object of the required type (optionally)
      * @throws DataAccessException if the query fails
      * @see #queryForOptionalObject(String, Class)
@@ -171,6 +177,7 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
      * @param argTypes SQL types of the arguments
      * (constants from {@code java.sql.Types})
      * @param rowMapper object that will map one object per row
+     * @param <T> The return object type
      * @return the single mapped object (optional)
      * @throws DataAccessException if the query fails
      */
@@ -197,6 +204,7 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
      * may also contain {@link SqlParameterValue} objects which indicate not
      * only the argument value but also the SQL type and optionally the scale
      * @param rowMapper object that will map one object per row
+     * @param <T> The return object type
      * @return the single mapped object (optional)
      * @throws DataAccessException if the query fails
      */
@@ -222,6 +230,7 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
      * {@code null} as argument array.
      * @param sql SQL query to execute
      * @param rowMapper object that will map one object per row
+     * @param <T> The return object type
      * @return the single mapped object (optional)
      * @throws DataAccessException if there is any problem executing the query
      * @see #queryForOptionalObject(String, Object[], RowMapper)
@@ -249,6 +258,7 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
      * (leaving it to the PreparedStatement to guess the corresponding SQL type);
      * may also contain {@link SqlParameterValue} objects which indicate not
      * only the argument value but also the SQL type and optionally the scale
+     * @param <T> The return object type
      * @return the single mapped object (optional)
      * @throws DataAccessException if the query fails
      */

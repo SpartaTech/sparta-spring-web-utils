@@ -41,9 +41,9 @@ public class QueryWhereClauseBuilder {
 	 * @param object object to read annotation and values
 	 * @param params map of parameters to set values for execution
 	 * @return String with the where clause
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 * @throws NoSuchMethodException
+	 * @throws IllegalAccessException In Case of Error 
+	 * @throws InvocationTargetException In Case of Error 
+	 * @throws NoSuchMethodException In Case of Error 
 	 */
 	public static String buildWhereClause(Object object, MapSqlParameterSource params) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		LOGGER.debug("Building query");

@@ -46,6 +46,7 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
      * @param sql SQL query to execute
      * @param paramSource container of arguments to bind to the query
      * @param rowMapper object that will map one object per row
+     * @param <T> The return object type
      * @return the single mapped object (optionally)
      * @throws org.springframework.dao.EmptyResultDataAccessException
      * if the query does not return exactly one row, or does not return exactly
@@ -73,6 +74,7 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
      * @param paramMap map of parameters to bind to the query
      * (leaving it to the PreparedStatement to guess the corresponding SQL type)
      * @param rowMapper object that will map one object per row
+     * @param <T> The return object type
      * @return the single mapped object (optionally)
      * @throws org.springframework.dao.EmptyResultDataAccessException
      * if the query does not return exactly one row, or does not return exactly
@@ -100,6 +102,7 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
      * @param paramSource parameters to bind to the query
      * (leaving it to the PreparedStatement to guess the corresponding SQL type)
      * @param requiredType class to map
+     * @param <T> The return object type
      * @return the single mapped object (optionally)
      * @throws org.springframework.dao.EmptyResultDataAccessException
      * if the query does not return exactly one row, or does not return exactly
@@ -128,6 +131,7 @@ public class SpartaNamedParameterJdbcTemplate extends NamedParameterJdbcTemplate
      * @param paramMap map of parameters to bind to the query
      * (leaving it to the PreparedStatement to guess the corresponding SQL type)
      * @param requiredType the type that the result object is expected to match
+     * @param <T> The return object type
      * @return the result object of the required type (optionally)
      * @throws org.springframework.dao.EmptyResultDataAccessException
      * if the query does not return exactly one row, or does not return exactly

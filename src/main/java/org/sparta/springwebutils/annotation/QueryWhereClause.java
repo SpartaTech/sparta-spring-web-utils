@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
 public @interface QueryWhereClause {
 	
 	/**
-	 * @return
+	 * @return the where clause
 	 */
 	String value();
 	

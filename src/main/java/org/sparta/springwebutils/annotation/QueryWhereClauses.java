@@ -26,7 +26,7 @@ public @interface QueryWhereClauses {
 	/**
 	 * List of annotations
 	 * 
-	 * @return 
+	 * @return the list of QueryWhereClause
 	 */
 	QueryWhereClause[] value();
 }
