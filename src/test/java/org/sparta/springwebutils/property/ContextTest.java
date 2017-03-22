@@ -4,7 +4,7 @@
  */
 package org.sparta.springwebutils.property;
 
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
@@ -15,8 +15,11 @@ import org.springframework.context.annotation.PropertySource;
  *  Mar 22, 2017 - Daniel Conde Diehl
  */
 @Configuration
-@ComponentScan(basePackages="org.sparta.springwebutils.property")
 @PropertySource("classpath:test-properties.properties")
 public class ContextTest {
 
+	@Bean
+	public PropertiesLoaderBuilderFactory factory() {
+		return new PropertiesLoaderBuilderFactory();
+	}
 }
