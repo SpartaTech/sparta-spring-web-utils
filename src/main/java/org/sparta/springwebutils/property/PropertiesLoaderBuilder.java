@@ -74,7 +74,7 @@ public class PropertiesLoaderBuilder {
      * Loads all properties found for a given prefix.
      * 
      * @param prefix prefix to find the properties 
-     * @param removePrefix if true -> removes the prefix from the destination prop, false-> copy with the same name
+     * @param removePrefix if true - removes the prefix from the destination prop, false - copy with the same name
      * @return PropertyLoaderBuilder to continue the builder chain
      */
     public PropertiesLoaderBuilder loadPropertiesByPrefix(String prefix, boolean removePrefix) {	
