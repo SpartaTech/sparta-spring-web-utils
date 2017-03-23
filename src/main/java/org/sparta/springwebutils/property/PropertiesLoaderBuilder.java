@@ -67,12 +67,27 @@ public class PropertiesLoaderBuilder {
      * @return PropertyLoaderBuilder to continue the builder chain
      */
     public PropertiesLoaderBuilder loadPropertiesByPrefix(String prefix) {
-        for (PropertySource<?> propertySource : env.getPropertySources()) {
+    	return loadPropertiesByPrefix(prefix, false);
+    }
+    
+    /**
+     * Loads all properties found for a given prefix.
+     * 
+     * @param prefix prefix to find the properties 
+     * @param removePrefix if true -> removes the prefix from the destination prop, false-> copy with the same name
+     * @return PropertyLoaderBuilder to continue the builder chain
+     */
+    public PropertiesLoaderBuilder loadPropertiesByPrefix(String prefix, boolean removePrefix) {	
+    	for (PropertySource<?> propertySource : env.getPropertySources()) {
             if (propertySource instanceof MapPropertySource) {
                 MapPropertySource mapPropSource = (MapPropertySource) propertySource;
                 for (String propName : mapPropSource.getPropertyNames()) {
                     if (propName.startsWith(prefix) && !props.containsKey(propName)) {
-                        props.put(propName, env.getProperty(propName));
+                    	String adjustedName = propName;
+                    	if (removePrefix) {
+                    		adjustedName = propName.substring(prefix.length(), propName.length());
+                    	}
+                        props.put(adjustedName, env.getProperty(propName));
                     }
                 }
             }

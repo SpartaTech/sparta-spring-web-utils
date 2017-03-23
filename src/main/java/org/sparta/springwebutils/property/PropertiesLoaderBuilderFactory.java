@@ -4,11 +4,9 @@
  */
 package org.sparta.springwebutils.property;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.AbstractEnvironment;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
 
 /**
  * Factory class for Properties Builder. 

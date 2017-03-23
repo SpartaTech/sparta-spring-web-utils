@@ -37,12 +37,15 @@ public class PropertyLoaderBuilderTest {
 								.loadPropertiesByPrefix("lib")
 								.loadProperty("another-value")
 								.loadProperty("non-existent")
+								.loadPropertiesByPrefix("prefixed.", true)
 								.build();
-		Assert.assertEquals(4, props.size());
+		Assert.assertEquals(6, props.size());
 		Assert.assertEquals("123", props.getProperty("internal"));
 		Assert.assertEquals("1", props.getProperty("lib.val1"));
 		Assert.assertEquals("3", props.getProperty("lib.val2"));
 		Assert.assertEquals("234", props.getProperty("another-value"));
+		Assert.assertEquals("non-prefix-1", props.getProperty("removed1"));
+		Assert.assertEquals("non-prefix-2", props.getProperty("removed2"));
 	}
 	
 	@Test
@@ -53,5 +56,7 @@ public class PropertyLoaderBuilderTest {
 		Assert.assertEquals("3", props.getProperty("lib.val2"));
 		Assert.assertEquals("234", props.getProperty("another-value"));
 		Assert.assertEquals("loader", props.getProperty("loader.val"));
+		Assert.assertEquals("non-prefix-1", props.getProperty("prefixed.removed1"));
+		Assert.assertEquals("non-prefix-2", props.getProperty("prefixed.removed2"));
 	}
 }
