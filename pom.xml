@@ -59,10 +59,12 @@
 		<commons-lang.version>[3.2.1,)</commons-lang.version>
 		<commons-io.version>[2.4,)</commons-io.version>
 		<commons-beanutils.version>[1.9.0,)</commons-beanutils.version>
-		<junit.version>[4.11,)</junit.version>
-		<jmockit.version>[1.15,)</jmockit.version>
+		<junit.version>4.12</junit.version>
+		<jmockit.version>1.15</jmockit.version>
 		<guava.version>18.0</guava.version>
 		<geronimo.servlet.version>1.0</geronimo.servlet.version>
+		<sparta-test-utils.version>0.8.1</sparta-test-utils.version>
+		<logback.version>[1.0.0,)</logback.version>
 	</properties>
 	
 	<build>
@@ -172,6 +174,11 @@
 			<artifactId>guava</artifactId>
 			<version>${guava.version}</version>
 		</dependency>
+		<dependency>
+		    <groupId>com.github.spartatech</groupId>
+	    	<artifactId>sparta-test-utils</artifactId>
+		    <version>${sparta-test-utils.version}</version>
+		</dependency>
 		<!-- END - Tests Dependencies -->
 
 		<!-- BEGIN - Logging Dependencies -->
@@ -185,6 +192,18 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${slf4j.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>${logback.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- END - Logging Dependencies -->

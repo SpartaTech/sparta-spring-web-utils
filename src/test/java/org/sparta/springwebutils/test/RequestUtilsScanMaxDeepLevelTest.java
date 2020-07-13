@@ -62,6 +62,8 @@ public class RequestUtilsScanMaxDeepLevelTest {
 				Assert.assertEquals(int.class, epp.getType());
 				Assert.assertEquals(false, epp.isRequired());
 				Assert.assertEquals("", epp.getDefaultValue());
+			} else if (epp.getName().equals("$jacocoData")) {
+				//Just ignore
 			} else {
 				Assert.fail("Invalid parameter, " + epp.getName());
 			}
