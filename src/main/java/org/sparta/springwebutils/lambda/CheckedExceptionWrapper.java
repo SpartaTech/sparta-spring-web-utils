@@ -25,7 +25,7 @@ public class CheckedExceptionWrapper extends RuntimeException {
     /**
      * Exception receiving the real-cause of the issue
      * 
-     * @param ex Original exception
+     * @param originalException Original exception
      */
     public CheckedExceptionWrapper(Exception originalException) {
         this.originalException = originalException;

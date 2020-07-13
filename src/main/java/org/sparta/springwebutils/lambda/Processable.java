@@ -20,7 +20,7 @@ public interface Processable {
     /**
      * Executes the process and throws Exception if necessary.
      * 
-     * @throws Exception
+     * @throws Exception The exception that happened
      */
     public abstract void process() throws Exception;
     
