@@ -1,38 +1,43 @@
+/*
+ * Sparta Software Co.
+ * 2021
+ */
 package org.sparta.springwebutils.test;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.google.common.collect.Iterables;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.sparta.springwebutils.RequestUtils;
 import org.sparta.springwebutils.config.MvcConfig;
 import org.sparta.springwebutils.controller.NotAnnotatedController;
 import org.sparta.springwebutils.entity.EntryPoint;
 import org.sparta.springwebutils.entity.EntryPointParameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-/** 
- * 
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
  * Test suite without annotation scan for methods exclusion
- * 
- * @author danieldiehl - Sparta Java Team 
- * 
- * History: 
- *    Mar 6, 2014 - danieldiehl
- *  
+ *
+ * @author Daniel Conde Diehl - Sparta Java Team
+ * <p>
+ * History:
+ * - Mar 06, 2014 - Daniel Conde Diehl
+ * - Oct 13, 2021 - Daniel Conde Diehl - Upgrading to Junit Jupiter
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes=MvcConfig.class)
 @WebAppConfiguration
+@DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
 public class RequestUtilsScanAnnotationsDisabledTest {
 	
 	@Autowired
@@ -41,395 +46,367 @@ public class RequestUtilsScanAnnotationsDisabledTest {
 	@Test
 	public void testArraysString() {
 		List<EntryPoint> entryPoints = requestUtilsAnnotationsDisabled.retrieveAllExternalEntryPoints();
-		EntryPoint ep = Iterables.find(entryPoints, new Predicate<EntryPoint>() {
-			@Override
-			public boolean apply(EntryPoint ep) {
-				return ep.getMethodName().equals("testArraysString");
-			}
-		});
+		EntryPoint ep = Iterables.find(entryPoints, ep1 -> ep1.getMethodName().equals("testArraysString"));
 		
 		int totalParameters = 0;
 		
-		Assert.assertTrue(ep.getUrls().contains("/testArraysStringRP"));
-		Assert.assertTrue(ep.getUrls().contains("/testArraysStringRP2"));
-		Assert.assertEquals(NotAnnotatedController.class, ep.getType());
+		assertTrue(ep.getUrls().contains("/testArraysStringRP"));
+		assertTrue(ep.getUrls().contains("/testArraysStringRP2"));
+		assertEquals(NotAnnotatedController.class, ep.getType());
 		
 		for (EntryPointParameter epp : ep.getParameters()) {
 			if (epp.getName().equals("requestParamStrArray")) {
 				totalParameters ++;
-				Assert.assertEquals(String[].class, epp.getType());
-				Assert.assertEquals(true, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(String[].class, epp.getType());
+				assertTrue(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("strArrayNotAnnotated")) {
 				totalParameters ++;
-				Assert.assertEquals(String[].class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(String[].class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("requestParamStrList")) {
 				totalParameters ++;
-				Assert.assertEquals(List.class, epp.getType());
-				Assert.assertEquals(true, epp.isRequired());
-				Assert.assertEquals("default", epp.getDefaultValue());
+				assertEquals(List.class, epp.getType());
+				assertTrue(epp.isRequired());
+				assertEquals("default", epp.getDefaultValue());
 			} else if (epp.getName().equals("strListNotAnnotated")) {
 				totalParameters ++;
-				Assert.assertEquals(List.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(List.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("requestParamStrSet")) {
 				totalParameters ++;
-				Assert.assertEquals(Set.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(Set.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("strSetNotAnnotated")) {
 				totalParameters ++;
-				Assert.assertEquals(Set.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(Set.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("requestParamStrCollection")) {
 				totalParameters ++;
-				Assert.assertEquals(Collection.class, epp.getType());
-				Assert.assertEquals(true, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(Collection.class, epp.getType());
+				assertTrue(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("strCollectionNotAnnotated")) {
 				totalParameters ++;
-				Assert.assertEquals(Collection.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(Collection.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else {
-				Assert.fail("Invalid parameter, " + epp.getName());
+				fail("Invalid parameter, " + epp.getName());
 			}
 		}
-		Assert.assertEquals(8, totalParameters);
+		assertEquals(8, totalParameters);
 	}
 
 	
 	@Test
 	public void testArraysInt() {
 		List<EntryPoint> entryPoints = requestUtilsAnnotationsDisabled.retrieveAllExternalEntryPoints();
-		EntryPoint ep = Iterables.find(entryPoints, new Predicate<EntryPoint>() {
-			@Override
-			public boolean apply(EntryPoint ep) {
-				return ep.getMethodName().equals("testArraysInt");
-			}
-		});
+		EntryPoint ep = Iterables.find(entryPoints, ep1 -> ep1.getMethodName().equals("testArraysInt"));
 		
 		int totalParameters = 0;
 		
-		Assert.assertTrue(ep.getUrls().contains("/testArraysIntRP"));
-		Assert.assertTrue(ep.getUrls().contains("/testArraysIntRP2"));
-		Assert.assertEquals(NotAnnotatedController.class, ep.getType());
+		assertTrue(ep.getUrls().contains("/testArraysIntRP"));
+		assertTrue(ep.getUrls().contains("/testArraysIntRP2"));
+		assertEquals(NotAnnotatedController.class, ep.getType());
 		
 		for (EntryPointParameter epp : ep.getParameters()) {
 			if (epp.getName().equals("requestParamIntArray")) {
 				totalParameters ++;
-				Assert.assertEquals(int[].class, epp.getType());
-				Assert.assertEquals(true, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(int[].class, epp.getType());
+				assertTrue(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("intArrayNotAnnotated")) {
 				totalParameters ++;
-				Assert.assertEquals(int[].class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
-			}else if (epp.getName().equals("requestParamIntegerArray")) {
+				assertEquals(int[].class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
+			} else if (epp.getName().equals("requestParamIntegerArray")) {
 				totalParameters ++;
-				Assert.assertEquals(Integer[].class, epp.getType());
-				Assert.assertEquals(true, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(Integer[].class, epp.getType());
+				assertTrue(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("integerArrayNotAnnotated")) {
 				totalParameters ++;
-				Assert.assertEquals(Integer[].class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(Integer[].class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else {
-				Assert.fail("Invalid parameter, " + epp.getName());
+				fail("Invalid parameter, " + epp.getName());
 			}
 		}
-		Assert.assertEquals(4, totalParameters);
+		assertEquals(4, totalParameters);
 	}
 	
 	@Test
 	public void testArraysLong() {
 		List<EntryPoint> entryPoints = requestUtilsAnnotationsDisabled.retrieveAllExternalEntryPoints();
-		EntryPoint ep = Iterables.find(entryPoints, new Predicate<EntryPoint>() {
-			@Override
-			public boolean apply(EntryPoint ep) {
-				return ep.getMethodName().equals("testArraysLong");
-			}
-		});
+		EntryPoint ep = Iterables.find(entryPoints, ep1 -> ep1.getMethodName().equals("testArraysLong"));
 		
 		int totalParameters = 0;
 		
-		Assert.assertTrue(ep.getUrls().contains("/testArraysLongRP"));
-		Assert.assertEquals(NotAnnotatedController.class, ep.getType());
+		assertTrue(ep.getUrls().contains("/testArraysLongRP"));
+		assertEquals(NotAnnotatedController.class, ep.getType());
 		
 		for (EntryPointParameter epp : ep.getParameters()) {
 			if (epp.getName().equals("requestParamLongArray")) {
 				totalParameters ++;
-				Assert.assertEquals(long[].class, epp.getType());
-				Assert.assertEquals(true, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(long[].class, epp.getType());
+				assertTrue(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("longArrayNotAnnotated")) {
 				totalParameters ++;
-				Assert.assertEquals(long[].class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(long[].class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			}else if (epp.getName().equals("requestParamLongObjArray")) {
 				totalParameters ++;
-				Assert.assertEquals(Long[].class, epp.getType());
-				Assert.assertEquals(true, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(Long[].class, epp.getType());
+				assertTrue(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("longObjArrayNotAnnotated")) {
 				totalParameters ++;
-				Assert.assertEquals(Long[].class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(Long[].class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
+			} else if (epp.getName().equals("$jacocoData")) {
+				//Just ignore
 			} else {
-				Assert.fail("Invalid parameter, " + epp.getName());
+				fail("Invalid parameter, " + epp.getName());
 			}
 		}
-		Assert.assertEquals(4, totalParameters);
+		assertEquals(4, totalParameters);
 	}
 	
 	@Test
 	public void testArraysDouble() {
 		List<EntryPoint> entryPoints = requestUtilsAnnotationsDisabled.retrieveAllExternalEntryPoints();
-		EntryPoint ep = Iterables.find(entryPoints, new Predicate<EntryPoint>() {
-			@Override
-			public boolean apply(EntryPoint ep) {
-				return ep.getMethodName().equals("testArraysDouble");
-			}
-		});
+		EntryPoint ep = Iterables.find(entryPoints, ep1 -> ep1.getMethodName().equals("testArraysDouble"));
 		
 		int totalParameters = 0;
 		
-		Assert.assertTrue(ep.getUrls().contains("/testArraysDoubleRP"));
-		Assert.assertEquals(NotAnnotatedController.class, ep.getType());
+		assertTrue(ep.getUrls().contains("/testArraysDoubleRP"));
+		assertEquals(NotAnnotatedController.class, ep.getType());
 		
 		for (EntryPointParameter epp : ep.getParameters()) {
 			if (epp.getName().equals("requestParamDoubleArray")) {
 				totalParameters ++;
-				Assert.assertEquals(double[].class, epp.getType());
-				Assert.assertEquals(true, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(double[].class, epp.getType());
+				assertTrue(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("doubleArrayNotAnnotated")) {
 				totalParameters ++;
-				Assert.assertEquals(double[].class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
-			}else if (epp.getName().equals("requestParamDoubleObjArray")) {
+				assertEquals(double[].class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
+			} else if (epp.getName().equals("requestParamDoubleObjArray")) {
 				totalParameters ++;
-				Assert.assertEquals(Double[].class, epp.getType());
-				Assert.assertEquals(true, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(Double[].class, epp.getType());
+				assertTrue(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("doubleObjArrayNotAnnotated")) {
 				totalParameters ++;
-				Assert.assertEquals(Double[].class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(Double[].class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else {
-				Assert.fail("Invalid parameter, " + epp.getName());
+				fail("Invalid parameter, " + epp.getName());
 			}
 		}
-		Assert.assertEquals(4, totalParameters);
+		assertEquals(4, totalParameters);
 	}
 
 	
 	@Test
 	public void testPrimitives() {
 		List<EntryPoint> entryPoints = requestUtilsAnnotationsDisabled.retrieveAllExternalEntryPoints();
-		EntryPoint ep = Iterables.find(entryPoints, new Predicate<EntryPoint>() {
-			@Override
-			public boolean apply(EntryPoint ep) {
-				return ep.getMethodName().equals("testPrimitives");
-			}
-		});
+		EntryPoint ep = Iterables.find(entryPoints, ep1 -> ep1.getMethodName().equals("testPrimitives"));
 		
 		int totalParameters = 0;
 		
-		Assert.assertTrue(ep.getUrls().contains("/primitives"));
-		Assert.assertEquals(NotAnnotatedController.class, ep.getType());
+		assertTrue(ep.getUrls().contains("/primitives"));
+		assertEquals(NotAnnotatedController.class, ep.getType());
 		
 		for (EntryPointParameter epp : ep.getParameters()) {
 			if (epp.getName().equals("str")) {
 				totalParameters ++;
-				Assert.assertEquals(String.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(String.class, epp.getType());
+				assertEquals(false, epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("pInt")) {
 				totalParameters ++;
-				Assert.assertEquals(int.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
-			}else if (epp.getName().equals("pLong")) {
+				assertEquals(int.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
+			} else if (epp.getName().equals("pLong")) {
 				totalParameters ++;
-				Assert.assertEquals(long.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(long.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("pDouble")) {
 				totalParameters ++;
-				Assert.assertEquals(double.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(double.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("pIntObj")) {
 				totalParameters ++;
-				Assert.assertEquals(Integer.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
-			}else if (epp.getName().equals("pLongObj")) {
+				assertEquals(Integer.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
+			} else if (epp.getName().equals("pLongObj")) {
 				totalParameters ++;
-				Assert.assertEquals(Long.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(Long.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("pDoubleObj")) {
 				totalParameters ++;
-				Assert.assertEquals(Double.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(Double.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else {
-				Assert.fail("Invalid parameter, " + epp.getName());
+				fail("Invalid parameter, " + epp.getName());
 			}
 		}
-		Assert.assertEquals(7, totalParameters);
+		assertEquals(7, totalParameters);
 	}
 	
 	@Test
 	public void testEntity() throws Exception {
 		List<EntryPoint> entryPoints = requestUtilsAnnotationsDisabled.retrieveAllExternalEntryPoints();
-		EntryPoint ep = Iterables.find(entryPoints, new Predicate<EntryPoint>() {
-			@Override
-			public boolean apply(EntryPoint ep) {
-				return ep.getMethodName().equals("testObject");
-			}
-		});
+		EntryPoint ep = Iterables.find(entryPoints, ep1 -> ep1.getMethodName().equals("testObject"));
 		
 		int totalParameters = 0;
 		
-		Assert.assertTrue(ep.getUrls().contains("/testObject"));
-		Assert.assertEquals(NotAnnotatedController.class, ep.getType());
+		assertTrue(ep.getUrls().contains("/testObject"));
+		assertEquals(NotAnnotatedController.class, ep.getType());
 		
 		for (EntryPointParameter epp : ep.getParameters()) {
 			if (epp.getName().equals("vInt")) {
 				totalParameters ++;
-				Assert.assertEquals(int.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(int.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("integers.vInt")) {
 				totalParameters ++;
-				Assert.assertEquals(int.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(int.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("integers.vIntObj")) {
 				totalParameters ++;
-				Assert.assertEquals(Integer.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
-			}else if (epp.getName().equals("integers.vIntArray")) {
+				assertEquals(Integer.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
+			} else if (epp.getName().equals("integers.vIntArray")) {
 				totalParameters ++;
-				Assert.assertEquals(int[].class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(int[].class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("integers.vIntArrayObj")) {
 				totalParameters ++;
-				Assert.assertEquals(Integer[].class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(Integer[].class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("integers.vIntListObj")) {
 				totalParameters ++;
-				Assert.assertEquals(List.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
-			}else if (epp.getName().equals("longs.vLong")) {
+				assertEquals(List.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
+			} else if (epp.getName().equals("longs.vLong")) {
 				totalParameters ++;
-				Assert.assertEquals(long.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(long.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("longs.vLongObj")) {
 				totalParameters ++;
-				Assert.assertEquals(Long.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(Long.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("longs.vLongArray")) {
 				totalParameters ++;
-				Assert.assertEquals(long[].class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(long[].class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("longs.vLongArrayObj")) {
 				totalParameters ++;
-				Assert.assertEquals(Long[].class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(Long[].class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("longs.vLongListObj")) {
 				totalParameters ++;
-				Assert.assertEquals(List.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(List.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
 			} else if (epp.getName().equals("testStr")) {
 				totalParameters ++;
-				Assert.assertEquals(String.class, epp.getType());
-				Assert.assertEquals(false, epp.isRequired());
-				Assert.assertEquals("", epp.getDefaultValue());
+				assertEquals(String.class, epp.getType());
+				assertFalse(epp.isRequired());
+				assertEquals("", epp.getDefaultValue());
+			} else if (epp.getName().contains("$jacocoData")) {
+				//Just ignore
 			} else {
-				Assert.fail("Invalid parameter, " + epp.getName());
+				fail("Invalid parameter, " + epp.getName());
 			}
 		}
 		
-		Assert.assertEquals(12, totalParameters);
+		assertEquals(12, totalParameters);
 	}
 	
 	@Test
 	public void testCyclic() throws Exception {
-		List<EntryPoint> entryPoints = requestUtilsAnnotationsDisabled.retrieveAllExternalEntryPoints();
-		EntryPoint ep = Iterables.find(entryPoints, new Predicate<EntryPoint>() {
-			@Override
-			public boolean apply(EntryPoint ep) {
-				return ep.getMethodName().equals("testCyclicReference");
-			}
-		});
+		final List<EntryPoint> entryPoints = requestUtilsAnnotationsDisabled.retrieveAllExternalEntryPoints();
+		final EntryPoint ep = Iterables.find(entryPoints, ep1 -> ep1.getMethodName().equals("testCyclicReference"));
 		
-		Assert.assertTrue(ep.getUrls().contains("/testCyclicReference"));
-		Assert.assertEquals(NotAnnotatedController.class, ep.getType());
-		Assert.assertEquals("Not expecting any parameters", 0, ep.getParameters().size());
+		assertTrue(ep.getUrls().contains("/testCyclicReference"));
+		assertEquals(NotAnnotatedController.class, ep.getType());
+
+		final List<EntryPointParameter> cleanedUpActualParameters = ep.getParameters().stream()
+				.filter(it -> !it.getName().contains("$jacocoData"))
+				.collect(Collectors.toList());
+
+		assertEquals(0, cleanedUpActualParameters.size(), "Not expecting any parameters");
 	}
 	
 	@Test
 	public void testIgnore() throws Exception {
 		List<EntryPoint> entryPoints = requestUtilsAnnotationsDisabled.retrieveAllExternalEntryPoints();
-		EntryPoint ep = Iterables.find(entryPoints, new Predicate<EntryPoint>() {
-			@Override
-			public boolean apply(EntryPoint ep) {
-				return ep.getMethodName().equals("testIgnoreObj");
-			}
-		});
+		EntryPoint ep = Iterables.find(entryPoints, ep1 -> ep1.getMethodName().equals("testIgnoreObj"));
 		
-		Assert.assertTrue(ep.getUrls().contains("/testIgnore"));
-		Assert.assertEquals(NotAnnotatedController.class, ep.getType());
-		Assert.assertEquals("Expecting one parameter", 1, ep.getParameters().size());
+		assertTrue(ep.getUrls().contains("/testIgnore"));
+		assertEquals(NotAnnotatedController.class, ep.getType());
+
+		final List<EntryPointParameter> cleanedUpActualParameters = ep.getParameters().stream()
+				.filter(it -> !it.getName().contains("$jacocoData"))
+				.collect(Collectors.toList());
+		assertEquals(1, cleanedUpActualParameters.size(), "Expecting one parameter");
 
 		EntryPointParameter epp = ep.getParameters().get(0);
-		Assert.assertEquals("str", epp.getName());
-		Assert.assertEquals(String.class, epp.getType());
-		Assert.assertEquals(false, epp.isRequired());
-		Assert.assertEquals("", epp.getDefaultValue());
+		assertEquals("str", epp.getName());
+		assertEquals(String.class, epp.getType());
+		assertFalse(epp.isRequired());
+		assertEquals("", epp.getDefaultValue());
 	}
 	
 	@Test
 	public void testIgnoreInside() throws Exception {
 		List<EntryPoint> entryPoints = requestUtilsAnnotationsDisabled.retrieveAllExternalEntryPoints();
-		EntryPoint ep = Iterables.find(entryPoints, new Predicate<EntryPoint>() {
-			@Override
-			public boolean apply(EntryPoint ep) {
-				return ep.getMethodName().equals("testIgnoreInsideObj");
-			}
-		});
+		EntryPoint ep = Iterables.find(entryPoints, ep1 -> ep1.getMethodName().equals("testIgnoreInsideObj"));
 		
-		Assert.assertTrue(ep.getUrls().contains("/testIgnoreInside"));
-		Assert.assertEquals(NotAnnotatedController.class, ep.getType());
-		Assert.assertEquals("Expecting one parameter", 1, ep.getParameters().size());
+		assertTrue(ep.getUrls().contains("/testIgnoreInside"));
+		assertEquals(NotAnnotatedController.class, ep.getType());
+
+		final List<EntryPointParameter> cleanedUpActualParameters = ep.getParameters().stream()
+				.filter(it -> !it.getName().contains("$jacocoData"))
+				.collect(Collectors.toList());
+		assertEquals(1, cleanedUpActualParameters.size(), "Expecting one parameter");
 
 		EntryPointParameter epp = ep.getParameters().get(0);
-		Assert.assertEquals("str", epp.getName());
-		Assert.assertEquals(String.class, epp.getType());
-		Assert.assertEquals(false, epp.isRequired());
-		Assert.assertEquals("", epp.getDefaultValue());
+		assertEquals("str", epp.getName());
+		assertEquals(String.class, epp.getType());
+		assertFalse(epp.isRequired());
+		assertEquals("", epp.getDefaultValue());
 	}
 }

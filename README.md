@@ -9,9 +9,9 @@ ___This is the Java 8 supporting version. If you're still using java 7 see java1
 
 __Features__:
 
-##Utilities
+## Utilities
 
-####Manifest Utils
+### Manifest Utils
 
 The Class ManifestUtils provides easy way to access manifest.mf information. 
 
@@ -45,7 +45,7 @@ or, xml based configuration
 
 </ol>
 
-####Request Utils
+### Request Utils
 Request Utils is a functionality that provides a way to list all HTTP entry points (@RequestMapping methods in a @controller class), allowing you to build interfaces to show/call your endpoints. 
 The basic use of it is: 
 ```Java
@@ -118,13 +118,13 @@ In this case your bean definition will be:
 
 
 
-####SpringContext Utils
+### SpringContext Utils
 
 Useful class for creating libraries that has its own context. It will not share context bean from the application which is including the library. Basically the contextMerger allows you to merge objects into an context.
 
 There are two ways of using it. First one is by context in XML file, the second one is by context on Config class.
 
-#####Context on XML file
+#### Context on XML file
 
 Usage:
 
@@ -193,7 +193,7 @@ __META-INF/spring/your-api-beans.xml__:
 						http://www.springframework.org/schema/context	http://www.springframework.org/schema/context/spring-context-4.1.xsd">
 
 	<context:component-scan base-package="com.yourcompany.yourapi"/>
-</beans
+</beans>
 ```
 
 
@@ -240,56 +240,57 @@ public class Test () {
 }
 ```
 
-#####By Config Class
+#### By Config Class
 This usage is pretty much the same as the previous method. The only difference is that you'll be using a config class to configure your beans instead of XML file.
 
 __YourApi.class__
 
 ```Java
 public class YourApi {
-	private static Logger LOGGER = LoggerFactory.getLogger(YourApi.class);
-	
-	private ApplicationContext context;
+  private static Logger LOGGER = LoggerFactory.getLogger(YourApi.class);
 
-	private YourService service;
-	
-	/**
-	 * Load context 
-	 * 
-	 * @param param1 Example param
-	 * @param param2 Example param
-	 */
-	public YourApi(String param1, String param2) {
-		initContext(param1, param2);
-	}
-	
-	/**
-	 * Initializes context with provided data
-	 * 
-	 * @param param1 Example param
-	 * @param param2 Example param
-	 */
-	private void initContext(String param1, String param2) {
-		LOGGER.info("Initializing your-api context");
-		
-		Map<String, Object> extraParams = new HashMap<String, Object>(); 
-		extraParams.put("param1", param1);
-		extraParams.put("param2", param2);
-		
-		context = SpringContextUtils.contextMergedBeans(extraParams, LibConfig.class);
-		service = context.getBean(YourService.class);
-		
-		LOGGER.info("your-api context initialized");
-	}
-	
-	/**
-	 * Calls Example Method
-	 * 
-	 * @return String Example return
-	 */
-	public String helloWorld() {
-		return service.helloWorld();
-	}
+  private ApplicationContext context;
+
+  private YourService service;
+
+  /**
+   * Load context 
+   *
+   * @param param1 Example param
+   * @param param2 Example param
+   */
+  public YourApi(String param1, String param2) {
+    initContext(param1, param2);
+  }
+
+  /**
+   * Initializes context with provided data
+   *
+   * @param param1 Example param
+   * @param param2 Example param
+   */
+  private void initContext(String param1, String param2) {
+    LOGGER.info("Initializing your-api context");
+
+    Map<String, Object> extraParams = new HashMap<String, Object>();
+    extraParams.put("param1", param1);
+    extraParams.put("param2", param2);
+
+    context = SpringContextUtils.contextMergedBeans(extraParams, LibConfig.class);
+    service = context.getBean(YourService.class);
+
+    LOGGER.info("your-api context initialized");
+  }
+
+  /**
+   * Calls Example Method
+   *
+   * @return String Example return
+   */
+  public String helloWorld() {
+    return service.helloWorld();
+  }
+}
 ```
 
 
@@ -347,12 +348,10 @@ public class Test () {
 }
 ```
 
-###
 
+## Database
 
-##Database
-
-###JDBCTemplate
+### JDBCTemplate
 We provide two extension classes for the original Spring JdbcTemplate. They are __SpartaJdbcTemplate__ and __SpartaNamedParameterJdbcTemplate__. The Sparta extended classes provide some missing extra methods for JdbcTemplate using Java8 Optional when getting an Object. 
 
 Without Sparta extensions the queryForObject returns _IncorrectResultSizeDataAccessException_ if the record was not found in the database, then your code would have to catch the exception and threat it. In Sparta extension classes we are providing methods queryForOptionalObject, these methods return an Optional object, which will contain either the value or empty if not found. 
@@ -367,7 +366,7 @@ Optional<String> result = jdbcTemplate.queryForOptionalObject("select 1 from dua
 
 Same argument options for queryForObject in JdbcTemplte and NamedParameterJdbcTemplate are available for queryForOptionalObject, in SpartaJdbcTemplate and SpartaNamedParameterJdbcTemplate.
 
-##WhereClauseBuilder
+## WhereClauseBuilder
 This functionality allows you to annotate a class and its fields. With the annotations information the WhereClauseBuilder will generate a where clause for the database query.
 
 Example:

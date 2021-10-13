@@ -3,3 +3,6 @@
 /.settings/
 /.classpath
 /.project
+*.iml
+.DS_Store
+/.idea/

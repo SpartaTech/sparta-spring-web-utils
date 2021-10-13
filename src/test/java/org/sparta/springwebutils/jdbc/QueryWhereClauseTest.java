@@ -1,22 +1,23 @@
-/**
+/*
  * Sparta Software Co.
  * 2016
  */
 package org.sparta.springwebutils.jdbc;
 
-import java.sql.Types;
-
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
+import java.sql.Types;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 /**
  * @author Daniel Conde Diehl - Sparta Technology
- *
+ * <p>
  * History:
- *  May 31, 2016 - Daniel Conde Diehl
+ * - May 31, 2016 - Daniel Conde Diehl
+ * - Oct 13, 2021 - Daniel Conde Diehl - Upgrading to Junit Jupiter
  */
 
 public class QueryWhereClauseTest {
@@ -33,12 +34,12 @@ public class QueryWhereClauseTest {
 		
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		final String actualQuery = QueryWhereClauseBuilder.buildWhereClause(testObj, params);
-		Assert.assertEquals("p.first_name = :firstName AND p.last_name = :lastName AND p.age > :age.min AND p.age < :age.max", actualQuery);
-		Assert.assertEquals(testObj.getFirstName(), params.getValue("firstName"));
-		Assert.assertEquals(testObj.getAge().getMin().toString(), params.getValue("age.min"));
-		Assert.assertEquals(Types.DOUBLE, params.getSqlType("age.min"));
-		Assert.assertEquals(testObj.getAge().getMax().toString(), params.getValue("age.max"));
-		Assert.assertEquals(Types.DOUBLE, params.getSqlType("age.max"));
+		assertEquals("p.first_name = :firstName AND p.last_name = :lastName AND p.age > :age.min AND p.age < :age.max", actualQuery);
+		assertEquals(testObj.getFirstName(), params.getValue("firstName"));
+		assertEquals(testObj.getAge().getMin().toString(), params.getValue("age.min"));
+		assertEquals(Types.DOUBLE, params.getSqlType("age.min"));
+		assertEquals(testObj.getAge().getMax().toString(), params.getValue("age.max"));
+		assertEquals(Types.DOUBLE, params.getSqlType("age.max"));
 		
 	}
 	
@@ -46,7 +47,7 @@ public class QueryWhereClauseTest {
 	public void testAllNull () throws Exception {
 		TestWhereBuilder testObj = new TestWhereBuilder();
 		final String actualQuery = QueryWhereClauseBuilder.buildWhereClause(testObj, null);
-		Assert.assertEquals("", actualQuery);
+		assertEquals("", actualQuery);
 	}
 	
 	@Test
@@ -54,7 +55,7 @@ public class QueryWhereClauseTest {
 		TestWhereBuilder testObj = new TestWhereBuilder();
 		testObj.setFirstName("Daniel");
 		final String actualQuery = QueryWhereClauseBuilder.buildWhereClause(testObj, null);
-		Assert.assertEquals("p.first_name = :firstName", actualQuery);
+		assertEquals("p.first_name = :firstName", actualQuery);
 	}
 	
 	@Test
@@ -64,8 +65,8 @@ public class QueryWhereClauseTest {
 		
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		final String actualQuery = QueryWhereClauseBuilder.buildWhereClause(testObj, params);
-		Assert.assertEquals("p.first_name = :firstName", actualQuery);
-		Assert.assertEquals(testObj.getFirstName(), params.getValue("firstName"));
+		assertEquals("p.first_name = :firstName", actualQuery);
+		assertEquals(testObj.getFirstName(), params.getValue("firstName"));
 	}
 	
 	@Test
@@ -78,8 +79,8 @@ public class QueryWhereClauseTest {
 		
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		final String actualQuery = QueryWhereClauseBuilder.buildWhereClause(testObj, params);
-		Assert.assertEquals("p.first_name = :firstName AND p.age > :age.min", actualQuery);
-		Assert.assertEquals(testObj.getFirstName(), params.getValue("firstName"));
-		Assert.assertEquals(testObj.getAge().getMin().toString(), params.getValue("age.min"));
+		assertEquals("p.first_name = :firstName AND p.age > :age.min", actualQuery);
+		assertEquals(testObj.getFirstName(), params.getValue("firstName"));
+		assertEquals(testObj.getAge().getMin().toString(), params.getValue("age.min"));
 	}
 }

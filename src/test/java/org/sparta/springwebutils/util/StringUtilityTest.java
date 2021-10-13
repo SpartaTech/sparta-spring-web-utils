@@ -1,25 +1,27 @@
-/**
+/*
  * Sparta Software Co.
  * 2020
  */
 package org.sparta.springwebutils.util;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 // @formatter:off
- /** 
- * 
+
+/**
  * Unit Tests for StringUtility.
- * 
+ *
  * @author Daniel Conde Diehl - Sparta Technology
- * 
- * History: 
- *    Jul 10, 2020 - Daniel Conde Diehl
- *  
+ * <p>
+ * History:
+ * - Jul 10, 2020 - Daniel Conde Diehl
+ * - Oct 13, 2021 - Daniel Conde Diehl - Upgrading to Junit Jupiter
  */
 // @formatter:on
 public class StringUtilityTest extends StringUtility {
@@ -31,58 +33,57 @@ public class StringUtilityTest extends StringUtility {
     
     @Test
     public void testTrimAllStringPropertiesNoProperties() throws Exception {
-        Object obj = new Object() ;
-        
-        StringUtility.trimAllStringProperties(obj);
-    }
-    
-    @Test(expected=NoSuchMethodException.class)
-    public void testTrimAllStringPropertiesNoGetters() throws Exception {
-        NoGetters obj = new NoGetters();
-        obj.setField1("123    ");
-        
-        StringUtility.trimAllStringProperties(obj);
-    }
-    
-    @Test(expected=NoSuchMethodException.class)
-    public void testTrimAllStringPropertiesNoSetters() throws Exception {
-        NoSetters obj = new NoSetters();
+        final Object obj = new Object();
         
         StringUtility.trimAllStringProperties(obj);
     }
     
     @Test
+    public void testTrimAllStringPropertiesNoGetters() {
+        final NoGetters obj = new NoGetters();
+        obj.setField1("123    ");
+        
+        assertThrows(NoSuchMethodException.class, () -> StringUtility.trimAllStringProperties(obj));
+    }
+    
+    @Test
+    public void testTrimAllStringPropertiesNoSetters() {
+        final NoSetters obj = new NoSetters();
+        assertThrows(NoSuchMethodException.class, () -> StringUtility.trimAllStringProperties(obj));
+    }
+    
+    @Test
     public void testTrimAllStringPropertiesNoStrings() throws Exception {
-        NoStrings obj = new NoStrings();
+        final NoStrings obj = new NoStrings();
         
         StringUtility.trimAllStringProperties(obj);
     }
     
     @Test
     public void testTrimAllStringPropertiesWithStrings() throws Exception {
-        WithStrings obj = new WithStrings();
+        final WithStrings obj = new WithStrings();
         obj.setField1("dasdass   ");
         obj.setField2("   321321   dd ");
         
         StringUtility.trimAllStringProperties(obj);
         
-        Assert.assertEquals("dasdass", obj.getField1());
-        Assert.assertEquals("321321   dd", obj.getField2());
+        assertEquals("dasdass", obj.getField1());
+        assertEquals("321321   dd", obj.getField2());
     }
     
     @Test
     public void testTrimAllStringPropertiesWithStringsPublic() throws Exception {
-        PublicWithStrings obj = new PublicWithStrings();
+        final PublicWithStrings obj = new PublicWithStrings();
         obj.setField1("dasdass   ");
         obj.setField2("   321321   dd ");
         
         StringUtility.trimAllStringProperties(obj);
         
-        Assert.assertEquals("dasdass", obj.getField1());
-        Assert.assertEquals("321321   dd", obj.getField2());
+        assertEquals("dasdass", obj.getField1());
+        assertEquals("321321   dd", obj.getField2());
     }
     
-    class NoGetters {
+    static class NoGetters {
         @SuppressWarnings("unused")
         private String field1;
 
@@ -94,7 +95,8 @@ public class StringUtilityTest extends StringUtility {
         }
     }
     
-    class NoSetters {
+    static class NoSetters {
+        @SuppressWarnings("unused")
         private String field1;
 
         /**
@@ -106,12 +108,12 @@ public class StringUtilityTest extends StringUtility {
     }
     
     @SuppressWarnings("unused")
-    class NoStrings {
+    static class NoStrings {
         private Integer field1;
         private List<Double> field2;
     }
     
-    class WithStrings {
+    static class WithStrings {
         private String field1;
         private String field2;
         /**
@@ -140,7 +142,7 @@ public class StringUtilityTest extends StringUtility {
         }
     }
     
-    public class PublicWithStrings {
+    public static class PublicWithStrings {
         private String field1;
         private String field2;
         /**
