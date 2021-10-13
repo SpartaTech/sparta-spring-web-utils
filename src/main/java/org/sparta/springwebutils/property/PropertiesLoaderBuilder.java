@@ -1,4 +1,4 @@
-/**
+/*
  * Sparta Software Co.
  * 2017
  */
@@ -11,15 +11,14 @@ import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.PropertySource;
 
 /**
- * Properties Builder class that loads the properties from the Spring context 
+ * Properties Builder class that loads the properties from the Spring context
  * and creates a Properties object with it.
- * 
- * @author Daniel Conde Diehl - Sparta Technology
  *
+ * @author Daniel Conde Diehl - Sparta Technology
+ * <p>
  * History:
- *  Mar 22, 2017 - Daniel Conde Diehl
+ * - Mar 22, 2017 - Daniel Conde Diehl
  */
-
 public class PropertiesLoaderBuilder {
     
     private AbstractEnvironment env;

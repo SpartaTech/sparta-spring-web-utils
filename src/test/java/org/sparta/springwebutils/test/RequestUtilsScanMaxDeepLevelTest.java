@@ -62,8 +62,9 @@ public class RequestUtilsScanMaxDeepLevelTest {
                 assertEquals(int.class, epp.getType());
                 assertFalse(epp.isRequired());
                 assertEquals("", epp.getDefaultValue());
-            } else if (epp.getName().equals("$jacocoData")) {
-                //Just ignore
+            } else if (epp.getName().equals("$jacocoData")
+                    || epp.getName().equals("__$lineHits$__")) {
+                //Just ignore, removing coverage parameters
             } else {
                 fail("Invalid parameter, " + epp.getName());
             }

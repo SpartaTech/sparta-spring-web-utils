@@ -65,6 +65,7 @@
 		<commons-beanutils.version>[1.9.0,)</commons-beanutils.version>
 		<commons-io.version>[2.4,)</commons-io.version>
 		<commons-lang.version>[3.2.1,)</commons-lang.version>
+		<commons-text.version>1.9</commons-text.version>
 		<guava.version>[30.0-jre,)</guava.version>
 		<geronimo.servlet.version>1.0</geronimo.servlet.version>
 		<h2.version>1.4.200</h2.version>
@@ -75,6 +76,7 @@
 		<slf4j.version>[1.6.1,)</slf4j.version>
 		<sparta-test-utils-junit5.version>1.0</sparta-test-utils-junit5.version>
 		<spring.version>[3.0.5.RELEASE,)</spring.version>
+
 	</properties>
 
 	<dependencies>
@@ -156,6 +158,11 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>${commons-beanutils.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>${commons-text.version}</version>
 		</dependency>
 		<!-- END - Commons Dependencies -->
 

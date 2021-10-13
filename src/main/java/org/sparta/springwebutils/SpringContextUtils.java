@@ -22,7 +22,7 @@ import org.springframework.core.env.PropertiesPropertySource;
 public class SpringContextUtils {
 
 	/**
-	 * Loads a context from a XML and inject all objects in the Map
+	 * Loads a context from an XML and inject all objects in the Map
 	 * 
 	 * @param xmlPath Path for the xml applicationContext
 	 * @param extraBeans Extra beans for being injected
@@ -36,7 +36,7 @@ public class SpringContextUtils {
 		XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(parentContext);
 		xmlReader.loadBeanDefinitions(xmlPath);
 		
-		//refreshed the context to create class and make autowires
+		//refreshed the context to create class and make autowire
 		parentContext.refresh();
 		
 		//return the created context

@@ -275,7 +275,7 @@ public class RequestUtilsScanAnnotationsDisabledTest {
 	}
 	
 	@Test
-	public void testEntity() throws Exception {
+	public void testEntity() {
 		List<EntryPoint> entryPoints = requestUtilsAnnotationsDisabled.retrieveAllExternalEntryPoints();
 		EntryPoint ep = Iterables.find(entryPoints, ep1 -> ep1.getMethodName().equals("testObject"));
 		
@@ -345,8 +345,9 @@ public class RequestUtilsScanAnnotationsDisabledTest {
 				assertEquals(String.class, epp.getType());
 				assertFalse(epp.isRequired());
 				assertEquals("", epp.getDefaultValue());
-			} else if (epp.getName().contains("$jacocoData")) {
-				//Just ignore
+			} else if (epp.getName().contains("$jacocoData")
+					|| epp.getName().contains("__$lineHits$__")) {
+				//Just ignore, these are coverage parameters
 			} else {
 				fail("Invalid parameter, " + epp.getName());
 			}
@@ -356,32 +357,25 @@ public class RequestUtilsScanAnnotationsDisabledTest {
 	}
 	
 	@Test
-	public void testCyclic() throws Exception {
+	public void testCyclic() {
 		final List<EntryPoint> entryPoints = requestUtilsAnnotationsDisabled.retrieveAllExternalEntryPoints();
 		final EntryPoint ep = Iterables.find(entryPoints, ep1 -> ep1.getMethodName().equals("testCyclicReference"));
 		
 		assertTrue(ep.getUrls().contains("/testCyclicReference"));
 		assertEquals(NotAnnotatedController.class, ep.getType());
 
-		final List<EntryPointParameter> cleanedUpActualParameters = ep.getParameters().stream()
-				.filter(it -> !it.getName().contains("$jacocoData"))
-				.collect(Collectors.toList());
-
-		assertEquals(0, cleanedUpActualParameters.size(), "Not expecting any parameters");
+		assertEquals(0, cleanupCoverageParameters(ep.getParameters()).size(), "Not expecting any parameters");
 	}
 	
 	@Test
-	public void testIgnore() throws Exception {
+	public void testIgnore() {
 		List<EntryPoint> entryPoints = requestUtilsAnnotationsDisabled.retrieveAllExternalEntryPoints();
 		EntryPoint ep = Iterables.find(entryPoints, ep1 -> ep1.getMethodName().equals("testIgnoreObj"));
 		
 		assertTrue(ep.getUrls().contains("/testIgnore"));
 		assertEquals(NotAnnotatedController.class, ep.getType());
 
-		final List<EntryPointParameter> cleanedUpActualParameters = ep.getParameters().stream()
-				.filter(it -> !it.getName().contains("$jacocoData"))
-				.collect(Collectors.toList());
-		assertEquals(1, cleanedUpActualParameters.size(), "Expecting one parameter");
+		assertEquals(1, cleanupCoverageParameters(ep.getParameters()).size(), "Expecting one parameter");
 
 		EntryPointParameter epp = ep.getParameters().get(0);
 		assertEquals("str", epp.getName());
@@ -391,22 +385,34 @@ public class RequestUtilsScanAnnotationsDisabledTest {
 	}
 	
 	@Test
-	public void testIgnoreInside() throws Exception {
+	public void testIgnoreInside() {
 		List<EntryPoint> entryPoints = requestUtilsAnnotationsDisabled.retrieveAllExternalEntryPoints();
 		EntryPoint ep = Iterables.find(entryPoints, ep1 -> ep1.getMethodName().equals("testIgnoreInsideObj"));
 		
 		assertTrue(ep.getUrls().contains("/testIgnoreInside"));
 		assertEquals(NotAnnotatedController.class, ep.getType());
 
-		final List<EntryPointParameter> cleanedUpActualParameters = ep.getParameters().stream()
-				.filter(it -> !it.getName().contains("$jacocoData"))
-				.collect(Collectors.toList());
-		assertEquals(1, cleanedUpActualParameters.size(), "Expecting one parameter");
+
+		assertEquals(1, cleanupCoverageParameters(ep.getParameters()).size(), "Expecting one parameter");
 
 		EntryPointParameter epp = ep.getParameters().get(0);
 		assertEquals("str", epp.getName());
 		assertEquals(String.class, epp.getType());
 		assertFalse(epp.isRequired());
 		assertEquals("", epp.getDefaultValue());
+	}
+
+	/**
+	 * Returns a list without coverage parameters. When doing code coverage some hidden parameters are added,
+	 * which disturbs the tests.
+	 *
+	 * @param originalParameters list with all parameters
+	 * @return filtered list without the coverage-related parameters
+	 */
+	private List<EntryPointParameter> cleanupCoverageParameters(List<EntryPointParameter> originalParameters) {
+		return originalParameters.stream()
+				.filter(it -> !it.getName().contains("$jacocoData")
+						&& !it.getName().contains("__$lineHits$__"))
+				.collect(Collectors.toList());
 	}
 }

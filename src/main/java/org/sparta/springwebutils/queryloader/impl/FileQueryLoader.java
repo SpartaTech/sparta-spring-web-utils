@@ -1,5 +1,12 @@
 package org.sparta.springwebutils.queryloader.impl;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringSubstitutor;
+import org.sparta.springwebutils.queryloader.QueryLoader;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
+
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -8,13 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.StrSubstitutor;
-import org.sparta.springwebutils.queryloader.QueryLoader;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.util.Assert;
 
 /**
  * Loads Queries from files. 
@@ -31,17 +31,20 @@ import org.springframework.util.Assert;
  * 
  * OR create a bean on your @Configuration class like:
  * <code>@Bean public QueryLoader queryLoader() { return new FileQueryLoader("/sql/"); }</code>
- * @author Daniel Conde Diehl
+ *
+ * @author Daniel Conde Diehl - Sparta Technology
+ * <p>
+ * History:
+ * - Mar 22, 2017 - Daniel Conde Diehl
+ * - Oct 13, 2021 - Daniel Conde Diehl - upgrading dependency libraries
  *
  */
 public class FileQueryLoader implements QueryLoader, InitializingBean {
 
 	private static final ConcurrentMap<String, String> QUERY_CACHE = new ConcurrentHashMap<>(50);
 
-	private String scriptsFolder;
-	
-	
-	
+	private final String scriptsFolder;
+
 	/**
 	 * Constructor, receives the path for the folder containing all the queries
 	 * 
@@ -54,7 +57,7 @@ public class FileQueryLoader implements QueryLoader, InitializingBean {
 	@Override
 	public String load(String queryName) {
 	    if (!QUERY_CACHE.containsKey(queryName)) {
-	        QUERY_CACHE.put(queryName, loadfromFromFile(queryName));
+	        QUERY_CACHE.put(queryName, loadFromFromFile(queryName));
 	    }
 	    
 		return QUERY_CACHE.get(queryName); 
@@ -79,9 +82,9 @@ public class FileQueryLoader implements QueryLoader, InitializingBean {
 	 * @return requested Query
 	 * @throws IllegalStateException In case query was not found
 	 */
-	private String loadfromFromFile(String queryName) throws IllegalStateException {
-		try (final InputStream is = getClass().getResourceAsStream(scriptsFolder + queryName + ".sql");) {
-		    String sql = StringUtils.join(IOUtils.readLines(is, StandardCharsets.UTF_8), IOUtils.LINE_SEPARATOR);
+	private String loadFromFromFile(String queryName) throws IllegalStateException {
+		try (final InputStream is = getClass().getResourceAsStream(scriptsFolder + queryName + ".sql")) {
+		    String sql = StringUtils.join(IOUtils.readLines(is, StandardCharsets.UTF_8), System.lineSeparator());
 		    
 		    // Look for tokens
 		    final String[] tokens = StringUtils.substringsBetween(sql, "${", "}");
@@ -92,7 +95,7 @@ public class FileQueryLoader implements QueryLoader, InitializingBean {
     	            (o, n) -> o
     	        ));
 		    
-		        sql = StrSubstitutor.replace(sql, values);
+		        sql = StringSubstitutor.replace(sql, values);
 		    }
 		    
 			return sql;
@@ -102,7 +105,7 @@ public class FileQueryLoader implements QueryLoader, InitializingBean {
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception {
+	public void afterPropertiesSet() {
 		Assert.notNull(scriptsFolder, "scriptsFolder cannot be null");
 	}
 }
