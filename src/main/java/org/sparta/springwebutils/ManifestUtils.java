@@ -77,7 +77,7 @@ public class ManifestUtils {
 	
 	
 	/**
-	 * reads the manifest from a exploded WAR
+	 * reads the manifest from an exploded WAR
 	 * 
 	 * @return Map<Object, Object> manifest entries if found otherwise empty map
 	 */

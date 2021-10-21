@@ -1,4 +1,7 @@
-
+/*
+ * Sparta Software Co.
+ * 2017
+ */
 package org.sparta.springwebutils.jdbc;
 
 import java.util.Optional;
@@ -11,18 +14,21 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlParameterValue;
 
-/** 
- * @author Carlos Eduardo Endler Genz – Sparta Java Team 
- * 
- * History: 
- *    Mar 11, 2015 - Carlos Eduardo Endler Genz
- *  
+/**
+ * Extended operations for JdbcTemplate.
+ *
+ * @author Carlos Eduardo Endler Genz – Sparta Java Team
+ * <p>
+ * History:
+ * - Mar 11, 2015 - Carlos Eduardo Endler Genz
+ * - Oct 21, 2021 - Daniel Conde Diehl - Formatting
  */ 
 public class SpartaJdbcTemplate extends JdbcTemplate {
-    
+
     /**
      * Construct a new SpartaJdbcTemplate for bean usage.
      * <p>Note: The DataSource has to be set before using the instance.
+     *
      * @see #setDataSource
      */
     public SpartaJdbcTemplate() {
@@ -32,6 +38,7 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
     /**
      * Construct a new SpartaJdbcTemplate, given a DataSource to obtain connections from.
      * <p>Note: This will not trigger initialization of the exception translator.
+     *
      * @param dataSource the JDBC DataSource to obtain connections from
      */
     public SpartaJdbcTemplate(DataSource dataSource) {
@@ -42,13 +49,14 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
      * Construct a new SpartaJdbcTemplate, given a DataSource to obtain connections from.
      * <p>Note: Depending on the "lazyInit" flag, initialization of the exception translator
      * will be triggered.
+     *
      * @param dataSource the JDBC DataSource to obtain connections from
-     * @param lazyInit whether to lazily initialize the SQLExceptionTranslator
+     * @param lazyInit   whether to lazily initialize the SQLExceptionTranslator
      */
     public SpartaJdbcTemplate(DataSource dataSource, boolean lazyInit) {
         super(dataSource, lazyInit);
     }
-    
+
     /**
      * Execute a query for a result object (optional), given static SQL.
      * <p>Uses a JDBC Statement, not a PreparedStatement. If you want to
@@ -58,10 +66,10 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
      * <p>This method is useful for running static SQL with a known outcome.
      * The query is expected to be a single row/single column query; the returned
      * result will be directly mapped to the corresponding object type.
-     * 
-     * @param sql SQL query to execute
+     *
+     * @param sql          SQL query to execute
      * @param requiredType the type that the result object is expected to match
-     * @param <T> The return object type
+     * @param <T>          The return object type
      * @return the result object of the required type (optionally)
      * @throws DataAccessException if there is any problem executing the query
      * @see #queryForOptionalObject(String, Object[], Class)
@@ -78,23 +86,23 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
         
         return result;
     }
-    
+
     /**
      * Query given SQL to create a prepared statement from SQL and a
      * list of arguments to bind to the query, expecting a result object (optional).
      * <p>The query is expected to be a single row/single column query; the returned
      * result will be directly mapped to the corresponding object type.
-     * 
-     * @param sql SQL query to execute
+     *
+     * @param sql          SQL query to execute
      * @param requiredType the type that the result object is expected to match
-     * @param args arguments to bind to the query
-     * @param <T> The return object type
-     * (leaving it to the PreparedStatement to guess the corresponding SQL type);
-     * may also contain {@link SqlParameterValue} objects which indicate not
-     * only the argument value but also the SQL type and optionally the scale
+     * @param args         arguments to bind to the query
+     * @param <T>          The return object type
+     *                     (leaving it to the PreparedStatement to guess the corresponding SQL type);
+     *                     may also contain {@link SqlParameterValue} objects which indicate not
+     *                     only the argument value but also the SQL type and optionally the scale
      * @return the result object of the required type (optionally)
      * @throws DataAccessException if the query fails
-     * @see #queryForOptionalObject(String, Class)
+     * @see #queryForOptionalObject(String, Class, Object...)
      */
     public <T> Optional<T> queryForOptionalObject(String sql, Class<T> requiredType, Object... args) throws DataAccessException {
         Optional<T> result;
@@ -108,19 +116,20 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
         
         return result;
     }
-    
+
     /**
      * Query given SQL to create a prepared statement from SQL and a
      * list of arguments to bind to the query, expecting a result object (optional).
      * <p>The query is expected to be a single row/single column query; the returned
      * result will be directly mapped to the corresponding object type.
-     * @param sql SQL query to execute
-     * @param args arguments to bind to the query
-     * (leaving it to the PreparedStatement to guess the corresponding SQL type);
-     * may also contain {@link SqlParameterValue} objects which indicate not
-     * only the argument value but also the SQL type and optionally the scale
+     *
+     * @param sql          SQL query to execute
+     * @param args         arguments to bind to the query
+     *                     (leaving it to the PreparedStatement to guess the corresponding SQL type);
+     *                     may also contain {@link SqlParameterValue} objects which indicate not
+     *                     only the argument value but also the SQL type and optionally the scale
      * @param requiredType the type that the result object is expected to match
-     * @param <T> The return object type
+     * @param <T>          The return object type
      * @return the result object of the required type (optionally)
      * @throws DataAccessException if the query fails
      * @see #queryForOptionalObject(String, Class)
@@ -137,18 +146,19 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
         
         return result;
     }
-    
+
     /**
      * Query given SQL to create a prepared statement from SQL and a
      * list of arguments to bind to the query, expecting a result object (optional).
      * <p>The query is expected to be a single row/single column query; the returned
      * result will be directly mapped to the corresponding object type.
-     * @param sql SQL query to execute
-     * @param args arguments to bind to the query
-     * @param argTypes SQL types of the arguments
-     * (constants from {@code java.sql.Types})
+     *
+     * @param sql          SQL query to execute
+     * @param args         arguments to bind to the query
+     * @param argTypes     SQL types of the arguments
+     *                     (constants from {@code java.sql.Types})
      * @param requiredType the type that the result object is expected to match
-     * @param <T> The return object type
+     * @param <T>          The return object type
      * @return the result object of the required type (optionally)
      * @throws DataAccessException if the query fails
      * @see #queryForOptionalObject(String, Class)
@@ -166,18 +176,19 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
         
         return result;
     }
-    
+
     /**
      * Query given SQL to create a prepared statement from SQL and a list
      * of arguments to bind to the query, mapping a single result row to a
      * Java object via a RowMapper.
-     * @param sql SQL query to execute
-     * @param args arguments to bind to the query
-     * (leaving it to the PreparedStatement to guess the corresponding SQL type)
-     * @param argTypes SQL types of the arguments
-     * (constants from {@code java.sql.Types})
+     *
+     * @param sql       SQL query to execute
+     * @param args      arguments to bind to the query
+     *                  (leaving it to the PreparedStatement to guess the corresponding SQL type)
+     * @param argTypes  SQL types of the arguments
+     *                  (constants from {@code java.sql.Types})
      * @param rowMapper object that will map one object per row
-     * @param <T> The return object type
+     * @param <T>       The return object type
      * @return the single mapped object (optional)
      * @throws DataAccessException if the query fails
      */
@@ -193,18 +204,19 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
         
         return result;
     }
-    
+
     /**
      * Query given SQL to create a prepared statement from SQL and a list
      * of arguments to bind to the query, mapping a single result row to a
      * Java object via a RowMapper.
-     * @param sql SQL query to execute
-     * @param args arguments to bind to the query
-     * (leaving it to the PreparedStatement to guess the corresponding SQL type);
-     * may also contain {@link SqlParameterValue} objects which indicate not
-     * only the argument value but also the SQL type and optionally the scale
+     *
+     * @param sql       SQL query to execute
+     * @param args      arguments to bind to the query
+     *                  (leaving it to the PreparedStatement to guess the corresponding SQL type);
+     *                  may also contain {@link SqlParameterValue} objects which indicate not
+     *                  only the argument value but also the SQL type and optionally the scale
      * @param rowMapper object that will map one object per row
-     * @param <T> The return object type
+     * @param <T>       The return object type
      * @return the single mapped object (optional)
      * @throws DataAccessException if the query fails
      */
@@ -228,9 +240,10 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
      * execute a static query with a PreparedStatement, use the overloaded
      * {@link #queryForOptionalObject(String, RowMapper, Object...)} method with
      * {@code null} as argument array.
-     * @param sql SQL query to execute
+     *
+     * @param sql       SQL query to execute
      * @param rowMapper object that will map one object per row
-     * @param <T> The return object type
+     * @param <T>       The return object type
      * @return the single mapped object (optional)
      * @throws DataAccessException if there is any problem executing the query
      * @see #queryForOptionalObject(String, Object[], RowMapper)
@@ -247,18 +260,19 @@ public class SpartaJdbcTemplate extends JdbcTemplate {
         
         return result;
     }
-    
+
     /**
      * Query given SQL to create a prepared statement from SQL and a list
      * of arguments to bind to the query, mapping a single result row to a
      * Java object via a RowMapper.
-     * @param sql SQL query to execute
+     *
+     * @param sql       SQL query to execute
      * @param rowMapper object that will map one object per row
-     * @param args arguments to bind to the query
-     * (leaving it to the PreparedStatement to guess the corresponding SQL type);
-     * may also contain {@link SqlParameterValue} objects which indicate not
-     * only the argument value but also the SQL type and optionally the scale
-     * @param <T> The return object type
+     * @param args      arguments to bind to the query
+     *                  (leaving it to the PreparedStatement to guess the corresponding SQL type);
+     *                  may also contain {@link SqlParameterValue} objects which indicate not
+     *                  only the argument value but also the SQL type and optionally the scale
+     * @param <T>       The return object type
      * @return the single mapped object (optional)
      * @throws DataAccessException if the query fails
      */
