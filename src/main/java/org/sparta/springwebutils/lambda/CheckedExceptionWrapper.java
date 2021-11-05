@@ -20,6 +20,9 @@ public class CheckedExceptionWrapper extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
+     /**
+      * Original exception thrown. Checked Exception being wrapped.
+      */
     private Exception originalException;
     
     /**

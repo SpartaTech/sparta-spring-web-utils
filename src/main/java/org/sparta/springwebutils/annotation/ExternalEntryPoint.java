@@ -17,10 +17,25 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface ExternalEntryPoint {
-	
+
+	/**
+	 * Name for external end-point
+	 *
+	 * @return name
+	 */
 	String name() default "";
-	
+
+	/**
+	 * Blacklist params by name
+	 *
+	 * @return list of params blacklisted by name
+	 */
 	String[] nameBlacklist() default {};
-	
+
+	/**
+	 * Blacklist params by type
+	 *
+	 * @return list of types for params that should be blacklisted
+	 */
 	Class<?>[] typeBlacklist() default {};
 }
