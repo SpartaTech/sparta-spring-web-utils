@@ -4,7 +4,7 @@
 	
 	<groupId>com.github.spartatech</groupId>
 	<artifactId>spring-web-utils-java8</artifactId>
-	<version>1.5.1</version>
+	<version>1.5.2</version>
 
 	<packaging>jar</packaging>
 	

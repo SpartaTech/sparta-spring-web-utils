@@ -89,8 +89,8 @@ public class ManifestUtils {
             if (servletContext != null) {
                 final String appServerHome = servletContext.getRealPath("");
                 final File manifestFile = new File(appServerHome, MANIFEST);
-                
-                LOGGER.debug("Using Manifest file:{}", manifestFile.getPath());
+
+				LOGGER.debug("Using Manifest file:{}", manifestFile.getPath());
                 
                 fis = new FileInputStream(manifestFile);
                 Manifest mf = new Manifest(fis);
@@ -113,7 +113,9 @@ public class ManifestUtils {
 	private Map<Object, Object> getClassPathManifestAttributes() {
 		Map<Object, Object> manifestAttributes = null;
 		try {
-		    LOGGER.debug("Using Manifest file:{}", getClass().getClassLoader().getResource(MANIFEST).getPath());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Using Manifest file:{}", getClass().getClassLoader().getResource(MANIFEST).getPath());
+			}
 		    
 		    Manifest manifest = new Manifest(getClass().getClassLoader().getResourceAsStream(MANIFEST));
 		    manifestAttributes = manifest.getMainAttributes();
@@ -132,7 +134,9 @@ public class ManifestUtils {
     private Map<Object, Object> getPackagedWarManifestAttributes() {
         Map<Object, Object> manifestAttributes = null;
         try {
-            LOGGER.debug("Using Manifest file:{}", servletContext.getResource(MANIFEST).getPath());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Using Manifest file:{}", servletContext.getResource(MANIFEST).getPath());
+			}
             
             Manifest manifest = new Manifest(servletContext.getResourceAsStream(MANIFEST));
             manifestAttributes = manifest.getMainAttributes();
