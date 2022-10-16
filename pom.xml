@@ -65,7 +65,7 @@
 		<commons-beanutils.version>[1.9.0,)</commons-beanutils.version>
 		<commons-io.version>[2.4,)</commons-io.version>
 		<commons-lang.version>[3.2.1,)</commons-lang.version>
-		<commons-text.version>1.9</commons-text.version>
+		<commons-text.version>1.10.0</commons-text.version>
 		<guava.version>[30.0-jre,)</guava.version>
 		<geronimo.servlet.version>1.0</geronimo.servlet.version>
 		<h2.version>2.1.210</h2.version>
