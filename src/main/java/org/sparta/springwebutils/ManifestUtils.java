@@ -56,7 +56,7 @@ public class ManifestUtils {
 	 * First tries from Exploded WAR, second Packaged WAR, third from classpath. 
 	 * if not found returns an empty map
 	 *
-	 * @return Map<Object, Object> manifest entries if found otherwise empty map
+	 * @return Map manifest entries if found otherwise empty map
 	 */
 	public Map<Object, Object> getManifestAttributes() {
 		Map<Object, Object> manifestAttributes = null;
@@ -77,7 +77,7 @@ public class ManifestUtils {
 	
 	
 	/**
-	 * reads the manifest from a exploded WAR
+	 * reads the manifest from an exploded WAR
 	 * 
 	 * @return Map<Object, Object> manifest entries if found otherwise empty map
 	 */
@@ -89,6 +89,8 @@ public class ManifestUtils {
             if (servletContext != null) {
                 final String appServerHome = servletContext.getRealPath("");
                 final File manifestFile = new File(appServerHome, MANIFEST);
+
+				LOGGER.debug("Using Manifest file:{}", manifestFile.getPath());
                 
                 fis = new FileInputStream(manifestFile);
                 Manifest mf = new Manifest(fis);
@@ -106,13 +108,17 @@ public class ManifestUtils {
 	/**
 	 * Reads the manifest entries for this application (classpath). Returns empty if anything fails.
 	 *
-	 * @return Map<Object, Object> manifest entries if found otherwise empty map
+	 * @return Map manifest entries if found otherwise empty map
 	 */
 	private Map<Object, Object> getClassPathManifestAttributes() {
 		Map<Object, Object> manifestAttributes = null;
 		try {
-		  Manifest manifest = new Manifest(getClass().getClassLoader().getResourceAsStream(MANIFEST));
-		  manifestAttributes = manifest.getMainAttributes();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Using Manifest file:{}", getClass().getClassLoader().getResource(MANIFEST).getPath());
+			}
+		    
+		    Manifest manifest = new Manifest(getClass().getClassLoader().getResourceAsStream(MANIFEST));
+		    manifestAttributes = manifest.getMainAttributes();
 		} catch (IOException e) {
 			LOGGER.warn("Unable to read the manifest from the classpath");
 			LOGGER.debug("Unable to read the manifest from the classpath", e);
@@ -123,14 +129,18 @@ public class ManifestUtils {
     /**
      * Retrieve the Manifest from a packaged war
      * 
-     * @return Map<Object, Object> manifest entries if found otherwise empty map
+     * @return Map manifest entries if found otherwise empty map
      */
     private Map<Object, Object> getPackagedWarManifestAttributes() {
         Map<Object, Object> manifestAttributes = null;
         try {
-          Manifest manifest = new Manifest(servletContext.getResourceAsStream(MANIFEST));
-          manifestAttributes = manifest.getMainAttributes();
-        } catch (IOException e) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Using Manifest file:{}", servletContext.getResource(MANIFEST).getPath());
+			}
+            
+            Manifest manifest = new Manifest(servletContext.getResourceAsStream(MANIFEST));
+            manifestAttributes = manifest.getMainAttributes();
+        } catch (Exception e) {
             LOGGER.warn("Unable to read the manifest from the packaged war");
             LOGGER.debug("Unable to read the manifest from the packaged", e);
         }
