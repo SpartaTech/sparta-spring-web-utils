@@ -71,11 +71,11 @@
 		<geronimo.servlet.version>1.0</geronimo.servlet.version>
 		<h2.version>2.2.220</h2.version>
 		<hikaricp.version>5.0.0</hikaricp.version>
-		<junit.version>5.8.1</junit.version>
+        <junit-jupiter.version>5.11.0</junit-jupiter.version>
 		<logback.version>[1.0.0,)</logback.version>
-		<mockito.version>4.0.0</mockito.version>
+		<mockito.version>5.13.0</mockito.version>
 		<slf4j.version>[1.6.1,)</slf4j.version>
-		<sparta-test-utils-junit5.version>1.0</sparta-test-utils-junit5.version>
+		<sparta-test-utils-junit5.version>2.1</sparta-test-utils-junit5.version>
 		<spring.version>[3.0.5.RELEASE,)</spring.version>
 
 	</properties>
@@ -183,7 +183,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>${junit.version}</version>
+			<version>${junit-jupiter.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
