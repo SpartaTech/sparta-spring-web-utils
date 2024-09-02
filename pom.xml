@@ -4,7 +4,7 @@
 	
 	<groupId>com.github.spartatech</groupId>
 	<artifactId>spring-web-utils</artifactId>
-	<version>1.5.6</version>
+	<version>1.5.7</version>
 
 	<packaging>jar</packaging>
 	
@@ -15,7 +15,7 @@
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -62,6 +62,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<!-- Libraries versions -->
+        <assertj.version>3.26.3</assertj.version>
 		<commons-beanutils.version>[1.9.0,)</commons-beanutils.version>
 		<commons-io.version>[2.4,)</commons-io.version>
 		<commons-lang.version>[3.2.1,)</commons-lang.version>
@@ -221,6 +222,12 @@
 			<version>${hikaricp.version}</version>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
 		<!-- END - Tests Dependencies -->
 	</dependencies>
 
