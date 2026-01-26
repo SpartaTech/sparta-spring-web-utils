@@ -62,7 +62,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<!-- Libraries versions -->
-        <assertj.version>3.26.3</assertj.version>
+        <assertj.version>3.27.7</assertj.version>
 		<commons-beanutils.version>[1.9.0,)</commons-beanutils.version>
 		<commons-io.version>[2.4,)</commons-io.version>
 		<commons-lang.version>[3.2.1,)</commons-lang.version>
