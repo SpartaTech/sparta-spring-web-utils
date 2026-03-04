@@ -1,7 +1,7 @@
 # sparta-spring-web-utils
 [![Build Status](https://app.travis-ci.com/SpartaTech/sparta-spring-web-utils.svg?branch=master)](https://app.travis-ci.com/SpartaTech/sparta-spring-web-utils)
 [![Coverage Status](https://coveralls.io/repos/github/SpartaTech/sparta-spring-web-utils/badge.svg?branch=master)](https://coveralls.io/github/SpartaTech/sparta-spring-web-utils?branch=master)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.spartatech/spring-web-utils/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/com.github.spartatech/spring-web-utils/)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.spartatech/spring-web-utils)](https://search.maven.org/artifact/com.github.spartatech/spring-web-utils)
 
 Spring Web Utility library. Includes functionalities to enhance the use of spring-mvc framework. 
 
