@@ -6,3 +6,6 @@
 *.iml
 .DS_Store
 /.idea/
+
+# GPG key renewal script
+renew-gpg-key.sh
