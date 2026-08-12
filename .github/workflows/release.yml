@@ -1,0 +1,41 @@
+name: Release to Maven Central
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17 and Central credentials
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+          server-id: central
+          server-username: CENTRAL_USERNAME
+          server-password: CENTRAL_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
+
+      - name: Verify tag matches project version
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          POM_VERSION="$(mvn --batch-mode help:evaluate -Dexpression=project.version -q -DforceStdout)"
+          echo "Tag version: $TAG_VERSION | POM version: $POM_VERSION"
+          if [ "$TAG_VERSION" != "$POM_VERSION" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match pom version $POM_VERSION"
+            exit 1
+          fi
+
+      - name: Build, sign, and deploy to Maven Central
+        run: mvn --batch-mode clean deploy -P release
+        env:
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
